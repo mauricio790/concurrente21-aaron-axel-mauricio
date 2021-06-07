@@ -20,7 +20,8 @@ void HttpServer::listenForever(const char* port) {
 }
 
 void HttpServer::handleClientConnection(Socket& client) {
-  
+  // TODO(you): Make this method concurrent. Store client connections (sockets)
+  // into a collection (e.g thread-safe queue) and stop
   cola.push(client);
   //Listo
 

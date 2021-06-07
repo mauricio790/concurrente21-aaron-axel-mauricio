@@ -6,6 +6,7 @@
 #include "TcpServer.hpp"
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
+#include "Queue.hpp"
 
 class HttpServer : public TcpServer {
   DISABLE_COPY(HttpServer);
@@ -35,6 +36,9 @@ class HttpServer : public TcpServer {
   /// this client (e.g: HTTP/1.0)
   virtual bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) = 0;
+
+    private: 
+       Queue <Socket> cola;
 };
 
 #endif  // HTTPSERVER_H
