@@ -21,14 +21,16 @@ class WebServer : public HttpServer {
   ~WebServer();
   /// Start the simulation
   int start(int argc, char* argv[]);
+  /// Handle HTTP requests. @see HttpServer::handleHttpRequest()
+  bool handleHttpRequest(HttpRequest& httpRequest,
+    HttpResponse& httpResponse) override;
+
 
  protected:
   /// Analyze the command line arguments
   /// @return true if program can continue execution, false otherwise
   bool analyzeArguments(int argc, char* argv[]);
-  /// Handle HTTP requests. @see HttpServer::handleHttpRequest()
-  bool handleHttpRequest(HttpRequest& httpRequest,
-    HttpResponse& httpResponse) override;
+  
 
  protected:
   /// Route, that provide an answer according to the URI value
