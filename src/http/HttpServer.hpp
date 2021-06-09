@@ -11,6 +11,9 @@
 class HttpServer : public TcpServer {
   DISABLE_COPY(HttpServer);
 
+ public:
+  Queue <Socket> clients_queue;
+
  protected:
   /// Lookup criteria for searching network information about this host
   struct addrinfo hints;
@@ -36,9 +39,7 @@ class HttpServer : public TcpServer {
   /// this client (e.g: HTTP/1.0)
   virtual bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) = 0;
-
-    private: 
-       Queue <Socket> cola;
+       
 };
 
 #endif  // HTTPSERVER_H

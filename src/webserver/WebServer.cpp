@@ -24,6 +24,12 @@ WebServer::WebServer() {
 WebServer::~WebServer() {
 }
 
+WebServer& WebServer::getInstance(){
+  static WebServer webServer;
+  return webServer;
+}
+
+
 int WebServer::start(int argc, char* argv[]) {
   try {
     if (this->analyzeArguments(argc, argv)) {

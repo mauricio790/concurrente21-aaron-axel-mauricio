@@ -5,18 +5,28 @@
 #include "HttpResponse.hpp"
 #include "WebServer.hpp"
 #include "Socket.hpp"
+#include "assert.h"
 
 
-HttpConnectionHandler::HttpConnectionHandler(int ConsumerDelay) 
-    : consumerDelay(consumerDelay){
+HttpConnectionHandler::HttpConnectionHandler() {
 }
 
-void HttpConnectionHandler::consume(Socket& client){
-    // TODO(you) Move the following loop to a consumer thread class
+int HttpConnectionHandler::run(){
+  // Start the forever loop to consume all clien connectios
+  this->consumeForever();
+  return 1;
+}
+
+
+
+void HttpConnectionHandler::consume(const Socket& client){
+  Socket client_copy(client);
+  (void)client;
+  // TODO(you) Move the following loop to a consumer thread class -- Listo
   // While the same client asks for HTTP requests in the same connection
   while (true) {
     // Create an object that parses the HTTP request from the socket
-    HttpRequest httpRequest(client);
+    HttpRequest httpRequest(client_copy);
 
     // If the request is not valid or an error happened
     if (!httpRequest.parse()) {
@@ -28,20 +38,17 @@ void HttpConnectionHandler::consume(Socket& client){
 
     // A complete HTTP client request was received. Create an object for the
     // server responds to that client's request
-    HttpResponse httpResponse(client);
+    HttpResponse httpResponse(client_copy);
 
     // Give subclass a chance to respond the HTTP request
-    const bool handled =  this->handleHttpRequest(httpRequest, httpResponse);
+    const bool handled =  WebServer::getInstance().handleHttpRequest(httpRequest, httpResponse);
 
     // If subclass did not handle the request or the client used HTTP/1.0
     if (!handled || httpRequest.getHttpVersion() == "HTTP/1.0") {
       // The socket will not be more used, close the connection
-      client.close();
+      client_copy.close();
       break;
     }
 
-    // This version handles just one client request per connection
-    // TODO(you): Remove this break after parallelizing this method
-    break;
   }
 }

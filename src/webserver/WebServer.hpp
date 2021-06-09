@@ -15,11 +15,9 @@ class WebServer : public HttpServer {
   const char* port = DEFAULT_PORT;
 
  public:
-  /// Constructor
-  WebServer();
-  /// Destructor
-  ~WebServer();
-  /// Start the simulation
+  /// Get access to the unique instance of this Singleton class
+  static WebServer& getInstance();
+  //Start
   int start(int argc, char* argv[]);
   /// Handle HTTP requests. @see HttpServer::handleHttpRequest()
   bool handleHttpRequest(HttpRequest& httpRequest,
@@ -44,6 +42,11 @@ class WebServer : public HttpServer {
   /// sends the response in HTML format as HTTP response
   bool serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, int64_t number);
+  /// Constructor
+  WebServer();
+  /// Destructor
+  ~WebServer();
+ 
 };
 
 #endif  // WEBSERVER_H
