@@ -8,25 +8,27 @@
 #include "assert.h"
 
 
-HttpConnectionHandler::HttpConnectionHandler() {
+HttpConnectionHandler::HttpConnectionHandler(int consumerDelay) 
+  : consumerDelay(consumerDelay) {
 }
+
 
 int HttpConnectionHandler::run(){
   // Start the forever loop to consume all clien connectios
   this->consumeForever();
-  return 1;
+  return EXIT_SUCCESS;
 }
 
 
 
 void HttpConnectionHandler::consume(const Socket& client){
-  Socket client_copy(client);
+  
   (void)client;
   // TODO(you) Move the following loop to a consumer thread class -- Listo
   // While the same client asks for HTTP requests in the same connection
   while (true) {
     // Create an object that parses the HTTP request from the socket
-    HttpRequest httpRequest(client_copy);
+    HttpRequest httpRequest(client);
 
     // If the request is not valid or an error happened
     if (!httpRequest.parse()) {
@@ -38,7 +40,7 @@ void HttpConnectionHandler::consume(const Socket& client){
 
     // A complete HTTP client request was received. Create an object for the
     // server responds to that client's request
-    HttpResponse httpResponse(client_copy);
+    HttpResponse httpResponse(client);
 
     // Give subclass a chance to respond the HTTP request
     const bool handled =  WebServer::getInstance().handleHttpRequest(httpRequest, httpResponse);
@@ -46,9 +48,8 @@ void HttpConnectionHandler::consume(const Socket& client){
     // If subclass did not handle the request or the client used HTTP/1.0
     if (!handled || httpRequest.getHttpVersion() == "HTTP/1.0") {
       // The socket will not be more used, close the connection
-      client_copy.close();
+      client.close();
       break;
     }
-
   }
 }

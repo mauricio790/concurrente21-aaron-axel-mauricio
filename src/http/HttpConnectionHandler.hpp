@@ -3,6 +3,7 @@
 
 #include "Consumer.hpp"
 #include "Socket.hpp"
+#include "HttpServer.hpp"
 
 
 class HttpConnectionHandler : public Consumer<Socket>{
@@ -11,16 +12,15 @@ class HttpConnectionHandler : public Consumer<Socket>{
     protected:
         /// Delay of consumer to consume a package, negative for max random
         int consumerDelay = 0;
-
     
     public:
         /// Constructor
-        explicit HttpConnectionHandler();
+        explicit HttpConnectionHandler(int consumerDelay);
         /// Consume the messages in its own execution thread
         int run() override;
         /// Override this method to process any data extracted from the queue
         void consume(const Socket& client) override;
-
+        
 };
 
 #endif  //HTTPCONNECTIONHANDLER_H

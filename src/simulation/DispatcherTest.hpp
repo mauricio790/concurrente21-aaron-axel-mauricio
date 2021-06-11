@@ -24,7 +24,7 @@ class DispatcherTest : public Dispatcher<int, NetworkMessage> {
   /// Start redirecting network messages
   int run() override;
   /// This method extracts the key from a data stored in the fromQueue
-  int extractKey(const NetworkMessage& data) const override;
+  int extractKey(const NetworkMessage& data)  override;
 };
 
 #endif  // DISPATCHERTEST_HPP

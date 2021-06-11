@@ -22,7 +22,7 @@ int DispatcherTest::run() {
   return EXIT_SUCCESS;
 }
 
-int DispatcherTest::extractKey(const NetworkMessage& data) const {
+int DispatcherTest::extractKey(const NetworkMessage& data)  {
   // Propagate a message requires time, simulate it
   // IMPORTANT: This simulation uses sleep() to mimic the process of propagating
   // a message. However, you must NEVER use sleep() for real projects

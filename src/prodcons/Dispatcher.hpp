@@ -56,7 +56,7 @@ class Dispatcher : public Consumer<DataType> {
   }
 
   /// Override this method to extract the key from a data stored in fromQueue
-  virtual KeyType extractKey(const DataType& data) const = 0;
+  virtual KeyType extractKey(const DataType& data) = 0;
 };
 
 #endif  // DISPATCHER_HPP

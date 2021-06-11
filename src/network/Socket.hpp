@@ -43,7 +43,7 @@ class Socket {
   /// Build a human-readable network address object of the peer
   NetworkAddress getNetworkAddress() const;
   /// Closes the network connection with peer
-  void close();
+   void close() const;
   /// Read a line of data received from peer
   /// @return true on success, false on error or connection closed by peer
   bool readLine(std::string& line, char separator = '\n');

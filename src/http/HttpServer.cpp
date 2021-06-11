@@ -3,14 +3,17 @@
 #include <cassert>
 #include <stdexcept>
 #include <string>
+#include <cstdlib>
+#include <iostream>
+#include <vector>
 
 #include "HttpServer.hpp"
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 #include "Socket.hpp"
+#include "HttpConnectionHandler.hpp"
 
-HttpServer::HttpServer() {
-}
+
 
 HttpServer::~HttpServer() {
 }
@@ -19,10 +22,25 @@ void HttpServer::listenForever(const char* port) {
   return TcpServer::listenForever(port);
 }
 
+void HttpServer::startThreads(const int* max_connections) {
+  
+  // Create each consumer
+  this->connectionHandlers.resize(*max_connections);
+  for ( int index = 0; index < *max_connections; ++index ) {
+    this->connectionHandlers[index] = new HttpConnectionHandler(this->consumerDelay);
+    assert(this->connectionHandlers[index]);
+    this->connectionHandlers[index]->setConsumingQueue(&clients_queue);
+  }
+  // Start the simulation
+  for ( int index = 0; index < *max_connections; ++index ) {
+    this->connectionHandlers[index]->startThread();
+  }
+
+}
+
 void HttpServer::handleClientConnection(Socket& client) {
   // TODO(you): Make this method concurrent. Store client connections (sockets)
   // into a collection (e.g thread-safe queue) and stop
-  Socket client_copy(client);
-  clients_queue.push(client_copy);
+  clients_queue.push(client);
   //Listo
 }

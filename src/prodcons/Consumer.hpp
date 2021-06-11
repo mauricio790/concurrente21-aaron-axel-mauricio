@@ -87,7 +87,7 @@ class Consumer : public virtual Thread {
   }
 
   /// Override this method to process any data extracted from the queue
-  virtual void consume(const DataType& data) = 0;
+  virtual void consume(const DataType& data)  = 0;
 };
 
 #endif  // CONSUMER_HPP

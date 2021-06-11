@@ -37,6 +37,7 @@ int WebServer::start(int argc, char* argv[]) {
       // Signal handler should call WebServer::stopListening(), send stop
       // conditions and wait for all secondary threads that it created
       this->listenForConnections(this->port);
+      this->startThreads(max_connections);
       const NetworkAddress& address = this->getNetworkAddress();
       std::cout << "web server listening on " << address.getIP()
         << " port " << address.getPort() << "...\n";
@@ -61,6 +62,8 @@ bool WebServer::analyzeArguments(int argc, char* argv[]) {
 
   if (argc >= 2) {
     this->port = argv[1];
+
+    scanf(argv[2],"%i",this->max_connections);
   }
 
   return true;

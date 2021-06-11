@@ -85,7 +85,7 @@ Socket::Socket()
   : sharedSocket{new SharedSocket()} {
 }
 
-void Socket::close() {
+ void Socket::close() const{
   this->sharedSocket->close();
 }
 

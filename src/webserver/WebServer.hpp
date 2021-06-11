@@ -13,6 +13,7 @@ class WebServer : public HttpServer {
  private:
   /// TCP port where this web server will listen for connections
   const char* port = DEFAULT_PORT;
+  const int* max_connections;
 
  public:
   /// Get access to the unique instance of this Singleton class
