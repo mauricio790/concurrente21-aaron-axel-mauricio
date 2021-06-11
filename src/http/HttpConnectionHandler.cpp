@@ -27,6 +27,7 @@ void HttpConnectionHandler::consume(const Socket& client){
   // TODO(you) Move the following loop to a consumer thread class -- Listo
   // While the same client asks for HTTP requests in the same connection
   while (true) {
+    
     // Create an object that parses the HTTP request from the socket
     HttpRequest httpRequest(client);
 

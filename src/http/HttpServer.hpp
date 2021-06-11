@@ -11,6 +11,7 @@
 #include "HttpResponse.hpp"
 #include "Queue.hpp"
 
+
 #include "common.hpp"
 
 
@@ -36,7 +37,7 @@ protected:
   /// For each accepted connection request, the virtual onConnectionAccepted()
   /// will be called. Inherited classes must override that method
   void listenForever(const char* port);
-  void startThreads(const int* max_connections);
+  void startThreads( int max_connections);
   virtual bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) = 0;
  

@@ -36,12 +36,14 @@ int WebServer::start(int argc, char* argv[]) {
       // TODO(you) Handle signal 2 (SIGINT) and 15 (SIGTERM), see man signal
       // Signal handler should call WebServer::stopListening(), send stop
       // conditions and wait for all secondary threads that it created
+      
       this->listenForConnections(this->port);
       this->startThreads(max_connections);
       const NetworkAddress& address = this->getNetworkAddress();
       std::cout << "web server listening on " << address.getIP()
         << " port " << address.getPort() << "...\n";
       this->acceptAllConnections();
+      
     }
   } catch (const std::runtime_error& error) {
     std::cerr << "error: " << error.what() << std::endl;
@@ -60,10 +62,10 @@ bool WebServer::analyzeArguments(int argc, char* argv[]) {
     }
   }
 
-  if (argc >= 2) {
+  if (argc >= 3) {
     this->port = argv[1];
-
-    scanf(argv[2],"%i",this->max_connections);
+    sscanf(argv[2],"%i",&max_connections);
+    printf("max connections: %i\n",this->max_connections);
   }
 
   return true;
@@ -165,6 +167,8 @@ bool WebServer::serveNotFound(HttpRequest& httpRequest
   return httpResponse.send();
 }
 
+#include <unistd.h>
+
 // TODO(you) Move domain-logic from WebServer controller to a view class
 // e.g GoldbachWebApp, and a model class e.g GoldbachCalculator
 bool WebServer::serveGoldbachSums(HttpRequest& httpRequest
@@ -175,6 +179,7 @@ bool WebServer::serveGoldbachSums(HttpRequest& httpRequest
   httpResponse.setHeader("Server", "AttoServer v1.0");
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
 
+  usleep(8000000);
   // Build the body of the response
   std::string title = "Goldbach sums for " + std::to_string(number);
   httpResponse.body() << "<!DOCTYPE html>\n"

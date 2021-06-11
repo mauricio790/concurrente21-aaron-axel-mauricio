@@ -3,7 +3,7 @@
 
 #include "Consumer.hpp"
 #include "Socket.hpp"
-#include "HttpServer.hpp"
+
 
 
 class HttpConnectionHandler : public Consumer<Socket>{
@@ -11,7 +11,7 @@ class HttpConnectionHandler : public Consumer<Socket>{
 
     protected:
         /// Delay of consumer to consume a package, negative for max random
-        int consumerDelay = 0;
+        int consumerDelay = 5000;
     
     public:
         /// Constructor

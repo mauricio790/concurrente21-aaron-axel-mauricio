@@ -11,7 +11,7 @@
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 #include "Socket.hpp"
-#include "HttpConnectionHandler.hpp"
+
 
 
 
@@ -22,17 +22,17 @@ void HttpServer::listenForever(const char* port) {
   return TcpServer::listenForever(port);
 }
 
-void HttpServer::startThreads(const int* max_connections) {
+void HttpServer::startThreads(int max_connections) {
   
   // Create each consumer
-  this->connectionHandlers.resize(*max_connections);
-  for ( int index = 0; index < *max_connections; ++index ) {
+  this->connectionHandlers.resize(max_connections);
+  for ( int index = 0; index < max_connections; ++index ) {
     this->connectionHandlers[index] = new HttpConnectionHandler(this->consumerDelay);
     assert(this->connectionHandlers[index]);
     this->connectionHandlers[index]->setConsumingQueue(&clients_queue);
   }
   // Start the simulation
-  for ( int index = 0; index < *max_connections; ++index ) {
+  for ( int index = 0; index < max_connections; ++index ) {
     this->connectionHandlers[index]->startThread();
   }
 
