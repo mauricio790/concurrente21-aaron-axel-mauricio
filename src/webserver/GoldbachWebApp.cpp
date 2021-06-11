@@ -1,4 +1,5 @@
 
+#include <limits>
 #include <regex>
 #include <string>
 
@@ -16,7 +17,7 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
     return this->serveHomepage(httpRequest, httpResponse);
   }
 
-  // TODO(you): URI can be a multi-value list, e.g: 100,2784,-53,200771728
+  // TODO(you): URI can be a multi-value list, e.g: 100,2784,-53,200771728 //Listo
   // TODO(you): change for sendGoldbachSums() if you prefer it
   std::smatch matches;
 
@@ -25,10 +26,13 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
   // If a number was asked in the form "/goldbach/1223"
   // or "/goldbach?number=1223"
   //Modificar regex
-  std::regex inQuery("^/goldbach(/|\\?number=)(-?\\d+(,-?\\d+))$");
+  std::regex inQuery("^/goldbach(/|\\?number=|\\?text=)((-?\\d+)(,|%2C)?)+$");
   if (std::regex_search(httpRequest.getURI(), matches, inQuery)) {
     assert(matches.length() >= 3);
     const int64_t number = std::stoll(matches[2]);
+    //if(){
+
+    //}
     return this->serveGoldbachSums(httpRequest, httpResponse, number);
   }
 
@@ -58,7 +62,7 @@ bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
     << "  <h1>" << title << "</h1>\n"
     << "  <form method=\"get\" action=\"/goldbach\">\n"
     << "    <label for=\"number\">Number</label>\n"
-    << "    <input type=\"number\" name=\"number\" required/>\n"
+    << "    <input type=\"text\" name=\"text\" required/>\n"
     << "    <button type=\"submit\">Calculate</button>\n"
     << "  </form>\n"
     << "</html>\n";
@@ -95,7 +99,8 @@ bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest
 #include <unistd.h>
 
 // TODO(you) Move domain-logic from WebServer controller to a view class
-// e.g GoldbachWebApp, and a model class e.g GoldbachCalculator
+// e.g GoldbachWebApp, and a model class e.g GoldbachCalculator //listo
+
 bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, int64_t number) {
   (void)httpRequest;
