@@ -12,6 +12,7 @@
 #include <string>
 #include <utility>
 
+
 #include "TcpServer.hpp"
 #include "NetworkAddress.hpp"
 #include "Socket.hpp"
@@ -106,6 +107,7 @@ void TcpServer::openConnectionRequestSocket(const char* port) {
   throw std::runtime_error(std::string("no available addresses for port ")
       + port);
 }
+
 
 void TcpServer::acceptAllConnections() {
   while (true) {

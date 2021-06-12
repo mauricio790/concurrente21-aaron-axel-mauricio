@@ -25,6 +25,5 @@ int Thread::waitToFinish() {
 
   delete this->thread;
   this->thread = nullptr;
-
   return EXIT_SUCCESS;
 }

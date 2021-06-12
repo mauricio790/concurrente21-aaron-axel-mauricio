@@ -23,13 +23,15 @@ class WebServer : public HttpServer {
   /// Handle HTTP requests. @see HttpServer::handleHttpRequest()
   bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) override;
+  void stopListening();
+  static void signalHandler(int signal);
 
 
  protected:
   /// Analyze the command line arguments
   /// @return true if program can continue execution, false otherwise
   bool analyzeArguments(int argc, char* argv[]);
-  void registerSignal();
+  
   
 
  private:

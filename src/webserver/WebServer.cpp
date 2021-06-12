@@ -11,6 +11,7 @@
 #include "NetworkAddress.hpp"
 #include "Socket.hpp"
 #include "WebServer.hpp"
+#include "Consumer.hpp"
 
 
 const char* const usage =
@@ -32,16 +33,23 @@ WebServer& WebServer::getInstance(){
   return webServer;
 }
 
-static void signalHandler(int PID){
-  printf("%i",PID);
+void WebServer::stopListening(){
+   this->stop(max_connections);
 }
 
-void WebServer::registerSignal(){
-  signal(SIGTERM,signalHandler);
+void WebServer::signalHandler(int signal){
+  if(signal == SIGINT || signal == SIGTERM){
+  
+  
+    WebServer::getInstance().stopListening();
+    exit(0);
+  }
 }
 
 int WebServer::start(int argc, char* argv[]) {
   try {
+   
+    signal(SIGINT, signalHandler);
     if (this->analyzeArguments(argc, argv)) {
       // TODO(you) Handle signal 2 (SIGINT) and 15 (SIGTERM), see man signal
       // Signal handler should call WebServer::stopListening(), send stop
