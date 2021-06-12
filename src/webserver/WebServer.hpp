@@ -29,7 +29,9 @@ class WebServer : public HttpServer {
   /// Analyze the command line arguments
   /// @return true if program can continue execution, false otherwise
   bool analyzeArguments(int argc, char* argv[]);
+  void registerSignal();
   
+
  private:
   /// Constructor
   WebServer();

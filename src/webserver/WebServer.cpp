@@ -5,11 +5,13 @@
 #include <regex>
 #include <stdexcept>
 #include <string>
+#include <signal.h>
 
 #include "GoldbachWebApp.hpp"
 #include "NetworkAddress.hpp"
 #include "Socket.hpp"
 #include "WebServer.hpp"
+
 
 const char* const usage =
   "Usage: webserv [port] [max_connections]\n"
@@ -30,6 +32,13 @@ WebServer& WebServer::getInstance(){
   return webServer;
 }
 
+static void signalHandler(int PID){
+  printf("%i",PID);
+}
+
+void WebServer::registerSignal(){
+  signal(SIGTERM,signalHandler);
+}
 
 int WebServer::start(int argc, char* argv[]) {
   try {
