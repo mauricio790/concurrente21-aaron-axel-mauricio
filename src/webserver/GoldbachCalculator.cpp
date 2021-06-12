@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <vector>
 #include "GoldbachCalculator.hpp"
 /**
  * @brief subrutina principal
@@ -15,8 +16,14 @@
   GoldbachCalculator::~GoldbachCalculator() {
   }
 /*int main(void) {
+  int numeros =-250;
+  std::vector<int64_t>* user_numbers;
+  for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) {
+      *it = numeros++;
+  } 
+  
   GoldbachCalculator calculator;
-  calculator.leerDatos();
+  calculator.leerDatos(user_numbers);
   return 0;
 }*/
 
@@ -25,14 +32,11 @@
  * @details Lee los numeros como una cadena y los covierte a int64_t y despues los envia para comenzar a sacar la conjetura.Se define la longitud del vector de structs
  * @param retorna si el programa se ejecuto correctamente o si fallo algo durante la ejecucion y se detiene si fallo algo.
  * */
-int GoldbachCalculator::leerDatos() {
-  int tamanio = 5;
-  FILE* input = stdin;
-  char datos[64];
+int GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
+  //FILE* input = stdin;
   int error = 0;
-  while (fscanf(input, "%s", datos) == 1) {
-    int64_t dato = (int64_t)atoi(datos);/*(int64_t) atoi(datos);*/
-    error = goldbach(dato, tamanio);
+  for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) { 
+      error = goldbach(*it);
     if (error == 1) {
         printf("Memoria insuficiente para imprimir las sumas\n");
         return EXIT_FAILURE;
@@ -47,7 +51,8 @@ int GoldbachCalculator::leerDatos() {
  * de una estrutura que almacenara las sumas
  * @param recibe el dato del cual queremos sacar su conjetura y la longitud del vector que se creara mas abajo
  * */
-int GoldbachCalculator::goldbach(int64_t dato, int tamanio) {
+int GoldbachCalculator::goldbach(int64_t dato) {
+  size_t tamanio = 5;
   bool esNegativo = false;
   int indxVec = 0;
   Sumas *sumandos;

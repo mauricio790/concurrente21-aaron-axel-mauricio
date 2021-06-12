@@ -11,12 +11,12 @@ public:
     };
     GoldbachCalculator();
     ~GoldbachCalculator();
-    int leerDatos();
+    int leerDatos(std::vector<int64_t>* user_numbers);
     bool esPrimo(int64_t numero);
     bool esPar(int64_t numero);
     int conFuerte(int64_t numero, bool esNegativo,Sumas *sumandos,int indxVec,int tamanio);
     int conDebil(int64_t numero,bool esNegativo,Sumas *sumandos, int indxVec, int tamanio);
-    int goldbach(int64_t dato, int tamanio);
+    int goldbach(int64_t dato);
     void imprimir(int cantidad, bool esNegativo, Sumas *sumandos);
 }; 
 #endif  //GOLDBACHCALCULATOR_H
