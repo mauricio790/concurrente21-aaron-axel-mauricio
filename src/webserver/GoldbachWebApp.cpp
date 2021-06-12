@@ -31,20 +31,21 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
   // If a number was asked in the form "/goldbach/1223"
   // or "/goldbach?number=1223"
   //Modificar regex
-  std::regex inQuery("^/goldbach(/|\\?number=|\\?text=)((-?\\d+)(,|%2C)?)+$");
+  std::regex inQuery("^/goldbach(/|\\?number=|\\?text=)(((-?\\d+)(,|%2C)?)+)$");
   if (std::regex_search(httpRequest.getURI(), matches, inQuery)) {
     assert(matches.length() >= 3);
-    
+    std::vector<int64_t> user_numbers;
+
     inQuery = ("(?!2C)(-?\\d+)");
     std::smatch num_matches;
+    std::cout << "URL:"<<matches[2] << std::endl;
     std::string numbers_in_URL = matches[2];
-    std::regex_search(numbers_in_URL, num_matches, inQuery);
-    std::vector<int64_t> user_numbers;
     
-    for (int index = 0; index <= num_matches.length(); ++index) {
-      if (num_matches[index] < LLONG_MIN && num_matches[index] > LLONG_MAX) {
-        int64_t number = std::stoll(num_matches[index]);
-        user_numbers.push_back(number);
+    while(std::regex_search(numbers_in_URL, num_matches, inQuery)){
+      if(num_matches[1].compare(LLONG_MAX) < 0){ // Modificar if
+        int64_t number = std::stoll(num_matches[1]);
+        user_numbers.push_back(number); 
+        numbers_in_URL = num_matches.suffix().str();
       } else {
         return this->serveNotFound(httpRequest, httpResponse);
       }
