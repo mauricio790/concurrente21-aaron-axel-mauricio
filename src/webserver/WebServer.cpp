@@ -18,7 +18,7 @@ const char* const usage =
     DEFAULT_PORT "\n"
   "  max_connections  Maximum number of allowed client connections\n";
 
-// TODO(you) Make WebServer a singleton class. See the Log class
+// TODO(you) Make WebServer a singleton class. See the Log class -- Done
 WebServer::WebServer() {
 }
 

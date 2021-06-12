@@ -40,7 +40,7 @@ void HttpServer::startThreads(int max_connections) {
 
 void HttpServer::handleClientConnection(Socket& client) {
   // TODO(you): Make this method concurrent. Store client connections (sockets)
-  // into a collection (e.g thread-safe queue) and stop
+  // into a collection (e.g thread-safe queue) and stop -- Done
   clients_queue.push(client);
   //Listo
 }

@@ -77,7 +77,6 @@ class Consumer : public virtual Thread {
     while (true) {
       // Get the next data to consume, or block while queue is empty
       const DataType& data = this->consumingQueue->pop();
-      printf("cliente nuevo\n");
       // If data is the stop condition, stop the loop
       if ( data == this->stopCondition ) {
         break;
