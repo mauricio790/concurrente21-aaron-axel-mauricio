@@ -1,9 +1,14 @@
 
-#include <limits>
 #include <regex>
 #include <string>
+#include <vector>
+//borrar luego
+#include <iostream>
 
 #include "GoldbachWebApp.hpp"
+
+#define LLONG_MIN "-9223372036854775806"
+#define LLONG_MAX "9223372036854775807" 
 
 GoldbachWebApp::GoldbachWebApp(){
 }
@@ -29,11 +34,22 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
   std::regex inQuery("^/goldbach(/|\\?number=|\\?text=)((-?\\d+)(,|%2C)?)+$");
   if (std::regex_search(httpRequest.getURI(), matches, inQuery)) {
     assert(matches.length() >= 3);
-    const int64_t number = std::stoll(matches[2]);
-    //if(){
-
-    //}
-    return this->serveGoldbachSums(httpRequest, httpResponse, number);
+    
+    inQuery = ("(?!2C)(-?\\d+)");
+    std::smatch num_matches;
+    std::string numbers_in_URL = matches[2];
+    std::regex_search(numbers_in_URL, num_matches, inQuery);
+    std::vector<int64_t> user_numbers;
+    
+    for (int index = 0; index <= num_matches.length(); ++index) {
+      if (num_matches[index] < LLONG_MIN && num_matches[index] > LLONG_MAX) {
+        int64_t number = std::stoll(num_matches[index]);
+        user_numbers.push_back(number);
+      } else {
+        return this->serveNotFound(httpRequest, httpResponse);
+      }
+    }
+    return this->serveGoldbachSums(httpRequest, httpResponse, &user_numbers);
   }
 
   // Unrecognized request
@@ -102,16 +118,22 @@ bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest
 // e.g GoldbachWebApp, and a model class e.g GoldbachCalculator //listo
 
 bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
-    , HttpResponse& httpResponse, int64_t number) {
+    , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers) {
   (void)httpRequest;
-
+  //Borrar ---------------------
+  std::cout << "user numbers:" << std::endl;
+  for(std::vector<int64_t>::iterator it = user_numbers->begin();
+    it != user_numbers->end(); ++it){
+      std::cout << ' ' << *it;  
+  }
+  //-----------------
   // Set HTTP response metadata (headers)
   httpResponse.setHeader("Server", "AttoServer v1.0");
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
 
   usleep(8000000);
   // Build the body of the response
-  std::string title = "Goldbach sums for " + std::to_string(number);
+  std::string title = "Goldbach sums for "; // + std::to_string(number);
   httpResponse.body() << "<!DOCTYPE html>\n"
     << "<html lang=\"en\">\n"
     << "  <meta charset=\"ascii\"/>\n"
