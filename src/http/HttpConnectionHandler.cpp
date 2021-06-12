@@ -8,10 +8,12 @@
 #include "assert.h"
 
 
-HttpConnectionHandler::HttpConnectionHandler(int consumerDelay) 
-  : consumerDelay(consumerDelay) {
+HttpConnectionHandler::HttpConnectionHandler()  {
 }
 
+void HttpConnectionHandler::sendStopCondition(){
+  this->consumingQueue->push(this->stopCondition);
+}
 
 int HttpConnectionHandler::run(){
   // Start the forever loop to consume all clien connectios

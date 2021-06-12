@@ -21,8 +21,6 @@ class HttpServer : public TcpServer {
  public:
   Queue <Socket> clients_queue;
   std::vector<HttpConnectionHandler*> connectionHandlers;
-  
-  int consumerDelay = 0;
 
 protected:
   /// Lookup criteria for searching network information about this host
@@ -40,6 +38,7 @@ protected:
   void startThreads( int max_connections);
   virtual bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) = 0;
+  void stop(int max_connections);
  
  protected:
   /// This method is called each time a client connection request is accepted.

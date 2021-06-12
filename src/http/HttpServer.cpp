@@ -11,7 +11,7 @@
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 #include "Socket.hpp"
-
+#include "Queue.hpp"
 
 
 
@@ -27,7 +27,7 @@ void HttpServer::startThreads(int max_connections) {
   // Create each consumer
   this->connectionHandlers.resize(max_connections);
   for ( int index = 0; index < max_connections; ++index ) {
-    this->connectionHandlers[index] = new HttpConnectionHandler(this->consumerDelay);
+    this->connectionHandlers[index] = new HttpConnectionHandler();
     assert(this->connectionHandlers[index]);
     this->connectionHandlers[index]->setConsumingQueue(&clients_queue);
   }
@@ -36,6 +36,16 @@ void HttpServer::startThreads(int max_connections) {
     this->connectionHandlers[index]->startThread();
   }
 
+}
+
+void HttpServer::stop(int max_connections){
+  //Send stop conditions
+  for ( int index = 0; index < max_connections; ++index ) {
+    this->connectionHandlers[index]->sendStopCondition();
+  }
+  for ( int index = 0; index < max_connections; ++index ) {
+    this->connectionHandlers[index]->waitToFinish();
+  }
 }
 
 void HttpServer::handleClientConnection(Socket& client) {
