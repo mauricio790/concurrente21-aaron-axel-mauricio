@@ -1,14 +1,12 @@
 
 #include <regex>
+#include <stdexcept> 
 #include <string>
 #include <vector>
 //borrar luego
 #include <iostream>
 
 #include "GoldbachWebApp.hpp"
-
-#define LLONG_MIN "-9223372036854775806"
-#define LLONG_MAX "9223372036854775807" 
 
 GoldbachWebApp::GoldbachWebApp(){
 }
@@ -30,7 +28,7 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
 
   // If a number was asked in the form "/goldbach/1223"
   // or "/goldbach?number=1223"
-  //Modificar regex
+  // or "/goldbach?text=1223"
   std::regex inQuery("^/goldbach(/|\\?number=|\\?text=)(((-?\\d+)(,|%2C)?)+)$");
   if (std::regex_search(httpRequest.getURI(), matches, inQuery)) {
     assert(matches.length() >= 3);
@@ -42,13 +40,13 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
     std::string numbers_in_URL = matches[2];
     
     while(std::regex_search(numbers_in_URL, num_matches, inQuery)){
-      if(num_matches[1].compare(LLONG_MAX) < 0){ // Modificar if
+      try {
         int64_t number = std::stoll(num_matches[1]);
         user_numbers.push_back(number); 
-        numbers_in_URL = num_matches.suffix().str();
-      } else {
+      } catch (const std::out_of_range& out_of_range){
         return this->serveNotFound(httpRequest, httpResponse);
       }
+      numbers_in_URL = num_matches.suffix().str();
     }
     return this->serveGoldbachSums(httpRequest, httpResponse, &user_numbers);
   }
