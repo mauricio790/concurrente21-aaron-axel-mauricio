@@ -6,12 +6,6 @@
 #include <vector>
 #include "GoldbachCalculator.hpp"
 
-struct Sumas{
-  int64_t cantSumas;
-  int64_t num1;
-  int64_t num2;
-  int64_t num3;
-    };
 /**
  * @brief subrutina principal
  * @details llama a la subrutina encargada de leer los datos
@@ -22,7 +16,7 @@ struct Sumas{
   }
   GoldbachCalculator::~GoldbachCalculator() {
   }
-/*int main(void) {
+int main(void) {
   int numeros =-250;
   std::vector<int64_t>* user_numbers;
   for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) {
@@ -32,17 +26,16 @@ struct Sumas{
   GoldbachCalculator calculator;
   calculator.leerDatos(user_numbers);
   return 0;
-}*/
+}
 
 /**
  * @brief Lee cada numero 
  * @details Lee los numeros como una cadena y los covierte a int64_t y despues los envia para comenzar a sacar la conjetura.Se define la longitud del vector de structs
  * @param retorna si el programa se ejecuto correctamente o si fallo algo durante la ejecucion y se detiene si fallo algo.
  * */
-struct* GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
-  //FILE* input = stdin;
+std::vector<GoldbachCalculator::Sumas>* GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
   int error = 0;
-  Sumas * ejemplo = (Sumas *)calloc(5, sizeof(Sumas));
+  //std::vector<GoldbachCalculator::Sumas>* ejemplo = (std::vector<GoldbachCalculator::Sumas>*);
   for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) { 
       error = goldbach(*it);
     /*if (error == 1) {
@@ -50,7 +43,7 @@ struct* GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
         return EXIT_FAILURE;
     }*/
   }
-  return ejemplo;
+  return &sumGoldbach;
 }
 
 /**
@@ -63,7 +56,6 @@ int GoldbachCalculator::goldbach(int64_t dato) {
   size_t tamanio = 5;
   bool esNegativo = false;
   int indxVec = 0;
-  Sumas *sumandos;
   int error = 0;
   // Verifica si se reservo correctamente la memoria
     printf("%lld: ", dato);
@@ -119,9 +111,14 @@ int indxVec, int tamanio) {
           // Verifica si se aumento el tamanio del arreglo correctamente.
           // if (!sumandos) {
           assert(sumandos);
-          sumandos[indxVec].num1 = num_1;
+          /*sumandos[indxVec].num1 = num_1;
           sumandos[indxVec].num2 = numero - num_1;
-          sumandos[indxVec].num3 = 0;
+          sumandos[indxVec].num3 = 0;*/
+            //sumGoldbach[indxVec].push_back(Sumas);
+            
+            sumGoldbach[indxVec].num1 = num_1;
+            sumGoldbach[indxVec].num2 = numero - num_1;
+            sumGoldbach[indxVec].num3 = 0;
             indxVec++;
           //} else {
               // error = 1;
@@ -133,8 +130,8 @@ int indxVec, int tamanio) {
   /* Verifica si debe imprimir los datos, esto si se cumplieron todos los 
    * requisitos y sino se imprime un mensaje de error*/
   if (error == 0) {
-    //imprimir(cantidad,esNegativo,sumandos);
     free(sumandos);
+    imprimir(cantidad,esNegativo,sumandos);
   }
   return error;
 }
@@ -175,9 +172,13 @@ int indxVec, int tamanio) {
                 // Verifica si se aumento el tamanio del arreglo correctamente.
                 // if (sumandos) {
                 assert(sumandos);
-                sumandos[indxVec].num1 = num_1;
+                /*sumandos[indxVec].num1 = num_1;
                 sumandos[indxVec].num2 = num_2;
-                sumandos[indxVec].num3 = num_3;
+                sumandos[indxVec].num3 = num_3;*/
+                
+                sumGoldbach[indxVec].num1 = num_1;
+                sumGoldbach[indxVec].num2 = num_2;
+                sumGoldbach[indxVec].num3 = num_3;
                 indxVec++;
                 // } else {
                     // error = 1;
@@ -192,16 +193,12 @@ int indxVec, int tamanio) {
   /* Verifica si debe imprimir los datos, esto si se cumplieron todos los 
    * requisitos y sino se imprime un mensaje de error*/
   if (error == 0) {
+    imprimir(cantidad,esNegativo,sumandos);
     free(sumandos);
   }
   return error;
 }
 
-/**
- * @brief Imprime las sumas de los numeros
- * @details Imprime la cantidad de sumas y sus respectivas sumas de cada numero en los casos que se requieran.Determina cual es la ultima suma para asi no imprimir la ','
- * @param la cantidad de sumas de cada numero, el signo del numero, arreglo donde se almacenan las sumas
- * */
 void GoldbachCalculator::imprimir(int cantidad,
 bool esNegativo, Sumas *sumandos) {
   FILE* output = stdout;
@@ -214,29 +211,29 @@ bool esNegativo, Sumas *sumandos) {
     for (int indice = 0; indice < cantidad; indice++) {
       /* Verifica si la estructura Sumas en el numero 3 es 0, para imprimir 
        * solo dos numeros y sino imprime los tres.*/
-      if (sumandos[indice].num3 == 0) {
+      if (sumGoldbach[indice].num3 == 0) {
         /*Verifica si es la ultima suma encontrada para 
          * imprimirla sin como y sino imprime con la coma*/
         if (indice != cantidad - 1) {
           fprintf(output, " %lld + %lld,",
-          sumandos[indice].num1,
-          sumandos[indice].num2);
+          sumGoldbach[indice].num1,
+          sumGoldbach[indice].num2);
         } else {
             fprintf(output, " %lld + %lld",
-            sumandos[indice].num1,
-            sumandos[indice].num2);
+            sumGoldbach[indice].num1,
+            sumGoldbach[indice].num2);
           }
             /* Verifica si la cantidad de sumas se puede almacenar en 
              * el arreglo y sino da un doble tamanio al arreglo.*/
       } else if (indice != cantidad - 1) {
-          fprintf(output, " %lld + %lld + %lld,", sumandos[indice].num1,
-          sumandos[indice].num2,
-          sumandos[indice].num3);
+          fprintf(output, " %lld + %lld + %lld,", sumGoldbach[indice].num1,
+          sumGoldbach[indice].num2,
+          sumGoldbach[indice].num3);
         } else {
             fprintf(output, " %lld + %lld + %lld",
-            sumandos[indice].num1,
-            sumandos[indice].num2,
-            sumandos[indice].num3);
+            sumGoldbach[indice].num1,
+            sumGoldbach[indice].num2,
+            sumGoldbach[indice].num3);
           }
     }
     printf("\n");
