@@ -1,17 +1,18 @@
 #ifndef GOLDBACHCALCULATOR_H
 #define GOLDBACHCALCULATOR_H
-
 class GoldbachCalculator {
 
 public:
-    struct Sumas{
-      int64_t num1;
-      int64_t num2;
-      int64_t num3;
-    };
+  struct Sumas{
+    int64_t cantSumas;
+    int64_t num1;
+    int64_t num2;
+    int64_t num3;
+  };
+    //std::vector<Sumas>* sumas_goldbach;
     GoldbachCalculator();
     ~GoldbachCalculator();
-    int leerDatos(std::vector<int64_t>* user_numbers);
+    struct* leerDatos(std::vector<int64_t>* user_numbers);
     bool esPrimo(int64_t numero);
     bool esPar(int64_t numero);
     int conFuerte(int64_t numero, bool esNegativo,Sumas *sumandos,int indxVec,int tamanio);

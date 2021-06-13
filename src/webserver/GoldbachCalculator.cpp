@@ -5,6 +5,13 @@
 #include <assert.h>
 #include <vector>
 #include "GoldbachCalculator.hpp"
+
+struct Sumas{
+  int64_t cantSumas;
+  int64_t num1;
+  int64_t num2;
+  int64_t num3;
+    };
 /**
  * @brief subrutina principal
  * @details llama a la subrutina encargada de leer los datos
@@ -32,17 +39,18 @@
  * @details Lee los numeros como una cadena y los covierte a int64_t y despues los envia para comenzar a sacar la conjetura.Se define la longitud del vector de structs
  * @param retorna si el programa se ejecuto correctamente o si fallo algo durante la ejecucion y se detiene si fallo algo.
  * */
-int GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
+struct* GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
   //FILE* input = stdin;
   int error = 0;
+  Sumas * ejemplo = (Sumas *)calloc(5, sizeof(Sumas));
   for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) { 
       error = goldbach(*it);
-    if (error == 1) {
+    /*if (error == 1) {
         printf("Memoria insuficiente para imprimir las sumas\n");
         return EXIT_FAILURE;
-    }
+    }*/
   }
-  return EXIT_SUCCESS;
+  return ejemplo;
 }
 
 /**
@@ -90,11 +98,13 @@ int GoldbachCalculator::conFuerte(int64_t numero,
 bool esNegativo, Sumas *sumandos,
 int indxVec, int tamanio) {
   int cantidad = 0;
+  //sumandos[0].cantSumas = 0;
   int error = 0;
   for (int64_t num_1 = 2; num_1 < numero; num_1++) {
     if (esPrimo(num_1) && esPrimo(numero - num_1)) {
       if (num_1 <= numero - num_1) {
         cantidad++;
+        //sumandos[0].cantSumas++;
         /* Verifica si dicho numero activo el booleano de 
          * que si es negativo para guardar las sumas.*/
         if (esNegativo) {
@@ -123,7 +133,7 @@ int indxVec, int tamanio) {
   /* Verifica si debe imprimir los datos, esto si se cumplieron todos los 
    * requisitos y sino se imprime un mensaje de error*/
   if (error == 0) {
-    imprimir(cantidad, esNegativo, sumandos);
+    //imprimir(cantidad,esNegativo,sumandos);
     free(sumandos);
   }
   return error;
@@ -140,6 +150,7 @@ int GoldbachCalculator::conDebil(int64_t numero,
 bool esNegativo, Sumas * sumandos,
 int indxVec, int tamanio) {
   int cantidad = 0;
+  //sumandos[0].cantSumas = 0;
   int error = 0;
   for (int64_t num_1 = 2; num_1 < numero; num_1++) {
     if (esPrimo(num_1)) {
@@ -150,6 +161,7 @@ int indxVec, int tamanio) {
              * primos es igual al numero ingresado*/
             if (num_1 + num_2 + num_3 == numero && esPrimo(num_3)) {
               cantidad++;
+              //sumandos[0].cantSumas++;
                 /*Verifica si dicho numero activo el booleano de 
                  * que si es negativo para guardar las sumas.*/
               if (esNegativo) {
@@ -180,11 +192,11 @@ int indxVec, int tamanio) {
   /* Verifica si debe imprimir los datos, esto si se cumplieron todos los 
    * requisitos y sino se imprime un mensaje de error*/
   if (error == 0) {
-    imprimir(cantidad, esNegativo, sumandos);
     free(sumandos);
   }
   return error;
 }
+
 /**
  * @brief Imprime las sumas de los numeros
  * @details Imprime la cantidad de sumas y sus respectivas sumas de cada numero en los casos que se requieran.Determina cual es la ultima suma para asi no imprimir la ','
