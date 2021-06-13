@@ -13,18 +13,18 @@ GoldbachCalculator::GoldbachCalculator() {
  GoldbachCalculator::~GoldbachCalculator() {
  }
  
-int main(void) {
-  int64_t numeros =-25;
+/*int main(void) {
+  int64_t numeros =-3;
   std::vector<int64_t> user_numbers;
   user_numbers.push_back(numeros);
-  //user_numbers.push_back(-10);
+  //user_numbers.push_back(10);
   
   GoldbachCalculator calculator;
   calculator.leerDatos(&user_numbers);
   //calculator.formarString(&user_numbers);
   //std::cout << calculator.sums_goldbach << std::endl;
   return 0;
-}
+}*/
 /**
  * @brief Lee cada numero 
  * @details Lee los numeros como una cadena y los covierte a int64_t y despues los envia para comenzar a sacar la conjetura.Se define la longitud del vector de structs
@@ -66,7 +66,7 @@ void GoldbachCalculator::goldbach(int64_t dato) {
         }
 	}
   else {
-    std::cout<<"NA"<<std::endl;
+    sums_goldbach << "NA";
   }
 }
 /**
@@ -141,10 +141,15 @@ void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers){
   std::vector<int64_t>::iterator it_nums = user_numbers->begin();
   std::vector<int>::iterator it_cantsums = cant_sumGoldbach.begin();
   int cantidad_sumas_totales = 0;
+  int index =0;
+  int cantidad_sumas = 0;
   while(it_cantsums != cant_sumGoldbach.end()){
     int cant_sumas = *it_cantsums;
-    //arreglar
-    int cantidad_sumas = cant_sumGoldbach[0];
+    //Falta probbarlo
+    if (*it_nums < 0) {
+        cantidad_sumas = cant_sumGoldbach[index];
+        index++;
+    }
     sums_goldbach << cant_sumas << "sums \n";
     if(*it_nums < 0){
       while(cantidad_sumas_totales < cantidad_sumas){
