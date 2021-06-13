@@ -10,34 +10,17 @@ GoldbachCalculator::GoldbachCalculator() {
  }
  GoldbachCalculator::~GoldbachCalculator() {
  }
-/*int main(void) {
-  int64_t numeros =-25;
-  std::vector<int64_t> user_numbers;
-  user_numbers.push_back(numeros);
-  //user_numbers.push_back(-10);
-  
-  GoldbachCalculator calculator;
-  std::vector<GoldbachCalculator::Sumas>* sums = calculator.leerDatos(&user_numbers);
-  //calculator.leerDatos(&user_numbers);
-  printf("%lld: \n", user_numbers[0]);
-  for (std::vector<GoldbachCalculator::Sumas>::iterator it = sums->begin() ;it != sums->end(); it++) { 
-      printf("%lld + %lld + %lld\n",it->num1,it->num2,it->num3);
-  }
-  printf("\n");
-  return 0;
-}*/
-
+ 
 /**
  * @brief Lee cada numero 
  * @details Lee los numeros como una cadena y los covierte a int64_t y despues los envia para comenzar a sacar la conjetura.Se define la longitud del vector de structs
  * @param retorna si el programa se ejecuto correctamente o si fallo algo durante la ejecucion y se detiene si fallo algo.
  * */
-std::vector<GoldbachCalculator::Sumas>* GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
+void GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
   //std::vector<GoldbachCalculator::Sumas>* ejemplo = (std::vector<GoldbachCalculator::Sumas>*);
   for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) { 
   	goldbach(*it);
   }
-  return &sumGoldbach;
 }
 /**
  * @brief Verificacion de los datos leidos 
@@ -89,6 +72,7 @@ void GoldbachCalculator::conFuerte(int64_t numero,bool esNegativo) {
       }
     }
   }
+  cant_sumGoldbach.push_back(cantidad);
 }
 /**
  * @brief Saca la conjetura debil de los numeros
@@ -126,6 +110,7 @@ void GoldbachCalculator::conDebil(int64_t numero,bool esNegativo) {
       }
     }
   }
+  cant_sumGoldbach.push_back(cantidad);
 }
 /**
  * @brief Determina si un numero es par

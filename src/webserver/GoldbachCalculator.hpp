@@ -10,15 +10,15 @@ class GoldbachCalculator {
 
 public:
   struct Sumas{
-    int64_t cantSumas;
     int64_t num1;
     int64_t num2;
     int64_t num3;
   };
+    std::vector<int> cant_sumGoldbach;
     std::vector<Sumas> sumGoldbach;
     GoldbachCalculator();
     ~GoldbachCalculator();
-    std::vector<GoldbachCalculator::Sumas>* leerDatos(std::vector<int64_t>* user_numbers);
+    void leerDatos(std::vector<int64_t>* user_numbers);
     bool esPrimo(int64_t numero);
     bool esPar(int64_t numero);
     void conFuerte(int64_t numero, bool esNegativo);
