@@ -1,5 +1,11 @@
 #ifndef GOLDBACHCALCULATOR_H
 #define GOLDBACHCALCULATOR_H
+#include <vector>
+#include <iostream>
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
 class GoldbachCalculator {
 
 public:

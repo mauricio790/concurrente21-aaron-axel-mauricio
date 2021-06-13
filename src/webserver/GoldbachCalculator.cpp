@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <vector>
+#include <iostream>
 #include "GoldbachCalculator.hpp"
 
 /**
@@ -16,17 +17,22 @@
   }
   GoldbachCalculator::~GoldbachCalculator() {
   }
-int main(void) {
-  int numeros =-250;
-  std::vector<int64_t>* user_numbers;
-  for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) {
-      *it = numeros++;
-  } 
+/*int main(void) {
+  int64_t numeros =-25;
+  std::vector<int64_t> user_numbers;
+  user_numbers.push_back(numeros);
+  user_numbers.push_back(-10);
   
   GoldbachCalculator calculator;
-  calculator.leerDatos(user_numbers);
+  std::vector<GoldbachCalculator::Sumas>* sums = calculator.leerDatos(&user_numbers);
+  //calculator.leerDatos(&user_numbers);
+  printf("%lld: ", user_numbers[0]);
+  for (std::vector<GoldbachCalculator::Sumas>::iterator it = sums->begin() ;it != sums->end(); it++) { 
+      printf("%lld + %lld + %lld \n",it->num1,it->num2,it->num3);
+      //std::cout << *it <<std::endl;
+  }
   return 0;
-}
+}*/
 
 /**
  * @brief Lee cada numero 
@@ -58,7 +64,7 @@ int GoldbachCalculator::goldbach(int64_t dato) {
   int indxVec = 0;
   int error = 0;
   // Verifica si se reservo correctamente la memoria
-    printf("%lld: ", dato);
+    //printf("%lld: ", dato);
     /* Verifica si el numero ingresado es negativo para convertirlo a 
      * positivo pero guardando que es negativo.*/
     if (dato < 0) {
@@ -114,12 +120,15 @@ int indxVec, int tamanio) {
           /*sumandos[indxVec].num1 = num_1;
           sumandos[indxVec].num2 = numero - num_1;
           sumandos[indxVec].num3 = 0;*/
-            //sumGoldbach[indxVec].push_back(Sumas);
-            
-            sumGoldbach[indxVec].num1 = num_1;
-            sumGoldbach[indxVec].num2 = numero - num_1;
-            sumGoldbach[indxVec].num3 = 0;
-            indxVec++;
+            GoldbachCalculator::Sumas sumas;
+            sumas.num1 = num_1;
+            sumas.num2 = numero - num_1;
+            sumas.num3 =0;
+            sumGoldbach.push_back(sumas);
+            //sumGoldbach[indxVec].num1 = num_1;
+            //sumGoldbach[indxVec].num2 = numero - num_1;
+            //sumGoldbach[indxVec].num3 = 0;
+            //indxVec++;
           //} else {
               // error = 1;
           //}
@@ -129,10 +138,6 @@ int indxVec, int tamanio) {
   }
   /* Verifica si debe imprimir los datos, esto si se cumplieron todos los 
    * requisitos y sino se imprime un mensaje de error*/
-  if (error == 0) {
-    free(sumandos);
-    imprimir(cantidad,esNegativo,sumandos);
-  }
   return error;
 }
 /**
@@ -175,11 +180,12 @@ int indxVec, int tamanio) {
                 /*sumandos[indxVec].num1 = num_1;
                 sumandos[indxVec].num2 = num_2;
                 sumandos[indxVec].num3 = num_3;*/
-                
-                sumGoldbach[indxVec].num1 = num_1;
-                sumGoldbach[indxVec].num2 = num_2;
-                sumGoldbach[indxVec].num3 = num_3;
-                indxVec++;
+                GoldbachCalculator::Sumas sumas;
+                sumas.num1 = num_1;
+                sumas.num2 = num_2;
+                sumas.num3 = num_3;
+                sumGoldbach.push_back(sumas);
+                //indxVec++;
                 // } else {
                     // error = 1;
                   // }
@@ -192,52 +198,7 @@ int indxVec, int tamanio) {
   }
   /* Verifica si debe imprimir los datos, esto si se cumplieron todos los 
    * requisitos y sino se imprime un mensaje de error*/
-  if (error == 0) {
-    imprimir(cantidad,esNegativo,sumandos);
-    free(sumandos);
-  }
   return error;
-}
-
-void GoldbachCalculator::imprimir(int cantidad,
-bool esNegativo, Sumas *sumandos) {
-  FILE* output = stdout;
-  /* Verifica si el numero es negativo para imprimir 
-   * todas las sumas y sino solo imprimi la cantidad de sumas.*/
-  if (!esNegativo) {
-    fprintf(output, "%d sums \n", cantidad);
-  } else {
-    fprintf(output, "%d sums:", cantidad);
-    for (int indice = 0; indice < cantidad; indice++) {
-      /* Verifica si la estructura Sumas en el numero 3 es 0, para imprimir 
-       * solo dos numeros y sino imprime los tres.*/
-      if (sumGoldbach[indice].num3 == 0) {
-        /*Verifica si es la ultima suma encontrada para 
-         * imprimirla sin como y sino imprime con la coma*/
-        if (indice != cantidad - 1) {
-          fprintf(output, " %lld + %lld,",
-          sumGoldbach[indice].num1,
-          sumGoldbach[indice].num2);
-        } else {
-            fprintf(output, " %lld + %lld",
-            sumGoldbach[indice].num1,
-            sumGoldbach[indice].num2);
-          }
-            /* Verifica si la cantidad de sumas se puede almacenar en 
-             * el arreglo y sino da un doble tamanio al arreglo.*/
-      } else if (indice != cantidad - 1) {
-          fprintf(output, " %lld + %lld + %lld,", sumGoldbach[indice].num1,
-          sumGoldbach[indice].num2,
-          sumGoldbach[indice].num3);
-        } else {
-            fprintf(output, " %lld + %lld + %lld",
-            sumGoldbach[indice].num1,
-            sumGoldbach[indice].num2,
-            sumGoldbach[indice].num3);
-          }
-    }
-    printf("\n");
-  }
 }
 /**
  * @brief Determina si un numero es par
