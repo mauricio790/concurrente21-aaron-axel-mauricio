@@ -21,22 +21,30 @@ const char* const usage =
     DEFAULT_PORT "\n"
   "  max_connections  Maximum number of allowed client connections\n";
 
-// TODO(you) Make WebServer a singleton class. See the Log class -- Done
+
 WebServer::WebServer() {
 }
 
 WebServer::~WebServer() {
 }
-
+/**
+ * @brief This is a singleton class, this method returns the only instance of this class 
+ * @return Returns the only WebServer instance
+ */
 WebServer& WebServer::getInstance(){
   static WebServer webServer;
   return webServer;
 }
-
+/**
+ * @brief This method calls HttpServer::stop() to stop all threads from consuming
+ */
 void WebServer::stopServer(){
    this->stop(max_connections);
 }
 
+/**
+ * @brief This method is called when a SIGINT or SIGTERM signal is raised
+ */
 void WebServer::signalHandler(int signal){
   if(signal == SIGINT || signal == SIGTERM){
     WebServer::getInstance().stopServer();

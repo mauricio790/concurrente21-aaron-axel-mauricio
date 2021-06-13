@@ -1,4 +1,3 @@
-
 #include "HttpConnectionHandler.hpp"
 #include "HttpServer.hpp"
 #include "HttpRequest.hpp"
@@ -11,19 +10,26 @@
 HttpConnectionHandler::HttpConnectionHandler()  {
 }
 
-
+/**
+ * @brief This method sends a stop condition to its own queue to stop consuming.
+ */
 void HttpConnectionHandler::sendStopCondition(){
   this->consumingQueue->push(this->stopCondition);
 }
 
+/**
+ * @brief This method is called when the thread is start it. Once called, it consumes forever from its own queue
+ */
 int HttpConnectionHandler::run(){
   // Start the forever loop to consume all client connectios
   this->consumeForever();
   return EXIT_SUCCESS;
 }
 
-
-
+/**
+ * @brief This method consumed data from its own queue while it still has requests from the same client
+ * @param const Socket& client is the element consumed form its own queue
+ */
 void HttpConnectionHandler::consume(const Socket& client){
   
   (void)client;

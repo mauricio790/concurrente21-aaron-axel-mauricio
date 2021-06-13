@@ -22,6 +22,10 @@ void HttpServer::listenForever(const char* port) {
   return TcpServer::listenForever(port);
 }
 
+/**
+ * @brief This method starts all the connections possible and assigns a reference to the consuming queue to each thread  
+ * @param int max_connections holds the number of maximum connections of the server
+ */
 void HttpServer::startThreads(int max_connections) {
   
   // Create each consumer
@@ -31,13 +35,18 @@ void HttpServer::startThreads(int max_connections) {
     assert(this->connectionHandlers[index]);
     this->connectionHandlers[index]->setConsumingQueue(&clients_queue);
   }
-  // Start the simulation
+
+  // Start consuming
   for ( int index = 0; index < max_connections; ++index ) {
     this->connectionHandlers[index]->startThread();
   }
 
 }
 
+/**
+ * @brief This method stops all threads from consuming by sending stop conditions and waits for all secondary threads to stop  
+ * @param int max_connections holds the number of maximum connections of the server
+ */
 void HttpServer::stop(int max_connections){
   //Send stop conditions
   for ( int index = 0; index < max_connections; ++index ) {
@@ -48,9 +57,11 @@ void HttpServer::stop(int max_connections){
   }
 }
 
+/**
+ * @brief This method stores client connections into a Queue
+ */
 void HttpServer::handleClientConnection(Socket& client) {
-  // TODO(you): Make this method concurrent. Store client connections (sockets)
-  // into a collection (e.g thread-safe queue) and stop -- Done
+  // TODO(you): Make this method concurrent. 
   clients_queue.push(client);
   //Listo
 }
