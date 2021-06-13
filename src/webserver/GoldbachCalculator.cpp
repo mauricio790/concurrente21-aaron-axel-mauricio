@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <vector>
 #include <iostream>
+#include <string>
+#include <sstream>
 #include "GoldbachCalculator.hpp"
 
 GoldbachCalculator::GoldbachCalculator() {
@@ -11,6 +13,18 @@ GoldbachCalculator::GoldbachCalculator() {
  GoldbachCalculator::~GoldbachCalculator() {
  }
  
+int main(void) {
+  int64_t numeros =-25;
+  std::vector<int64_t> user_numbers;
+  user_numbers.push_back(numeros);
+  //user_numbers.push_back(-10);
+  
+  GoldbachCalculator calculator;
+  calculator.leerDatos(&user_numbers);
+  //calculator.formarString(&user_numbers);
+  //std::cout << calculator.sums_goldbach << std::endl;
+  return 0;
+}
 /**
  * @brief Lee cada numero 
  * @details Lee los numeros como una cadena y los covierte a int64_t y despues los envia para comenzar a sacar la conjetura.Se define la longitud del vector de structs
@@ -18,8 +32,14 @@ GoldbachCalculator::GoldbachCalculator() {
  * */
 void GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
   //std::vector<GoldbachCalculator::Sumas>* ejemplo = (std::vector<GoldbachCalculator::Sumas>*);
-  for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) { 
+  //std::string sums = sums_goldbach.str();
+  //std::cout << sums << std::endl;
+  for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) {
+    sums_goldbach << *it << ": ";
   	goldbach(*it);
+    formarString(user_numbers);
+    std::string sums = sums_goldbach.str();
+    std::cout << sums << std::endl;
   }
 }
 /**
@@ -45,6 +65,9 @@ void GoldbachCalculator::goldbach(int64_t dato) {
          	conDebil(dato, esNegativo);
         }
 	}
+  else {
+    std::cout<<"NA"<<std::endl;
+  }
 }
 /**
  * @brief Saca la conjetura fuerte de los numeros
@@ -68,11 +91,13 @@ void GoldbachCalculator::conFuerte(int64_t numero,bool esNegativo) {
             sumas.num2 = numero - num_1;
             sumas.num3 =0;
             sumGoldbach.push_back(sumas);
+            //formarString(sumas);
         }
       }
     }
   }
   cant_sumGoldbach.push_back(cantidad);
+
 }
 /**
  * @brief Saca la conjetura debil de los numeros
@@ -112,6 +137,36 @@ void GoldbachCalculator::conDebil(int64_t numero,bool esNegativo) {
   }
   cant_sumGoldbach.push_back(cantidad);
 }
+void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers){
+  std::vector<int64_t>::iterator it_nums = user_numbers->begin();
+  std::vector<int>::iterator it_cantsums = cant_sumGoldbach.begin();
+  int cantidad_sumas_totales = 0;
+  while(it_cantsums != cant_sumGoldbach.end()){
+    int cant_sumas = *it_cantsums;
+    //arreglar
+    int cantidad_sumas = cant_sumGoldbach[0];
+    sums_goldbach << cant_sumas << "sums \n";
+    if(*it_nums < 0){
+      while(cantidad_sumas_totales < cantidad_sumas){
+        sums_goldbach << sumGoldbach[cantidad_sumas_totales].num1 << "+" << sumGoldbach[cantidad_sumas_totales].num2;
+        if (sumGoldbach[cantidad_sumas_totales].num3 != 0){
+          sums_goldbach << "+" << sumGoldbach[cantidad_sumas_totales].num3 << "\n";
+        }
+        ++cantidad_sumas_totales;
+      }
+    }
+    if(*(it_nums+1) < 0){
+      //httpResponse.body() << "<h2>"<< "+" << *(it_nums+1) << "</h2>\n";
+      ++it_cantsums;
+      cantidad_sumas += *it_cantsums;
+    } else {
+      ++it_cantsums;
+    }
+  }
+}
+
+
+
 /**
  * @brief Determina si un numero es par
  * @details divide el numero para ver si es divisible entre 2

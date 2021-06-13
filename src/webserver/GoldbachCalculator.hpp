@@ -4,8 +4,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdbool.h>
-#include <string.h>
+#include <string>
 #include <stdlib.h>
+#include <sstream>
 class GoldbachCalculator {
 
 public:
@@ -15,7 +16,9 @@ public:
     int64_t num3;
   };
     std::vector<int> cant_sumGoldbach;
+    std::stringstream sums_goldbach;
     std::vector<Sumas> sumGoldbach;
+    std::vector<std::string> sumas_gold;
     GoldbachCalculator();
     ~GoldbachCalculator();
     void leerDatos(std::vector<int64_t>* user_numbers);
@@ -24,5 +27,6 @@ public:
     void conFuerte(int64_t numero, bool esNegativo);
     void conDebil(int64_t numero,bool esNegativo);
     void goldbach(int64_t dato);
+    void formarString(std::vector<int64_t>* user_numbers);
 }; 
 #endif  //GOLDBACHCALCULATOR_H
