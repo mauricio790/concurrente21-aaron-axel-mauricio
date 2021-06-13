@@ -75,10 +75,12 @@ class Consumer : public virtual Thread {
   virtual void consumeForever() {
     assert(this->consumingQueue);
     while (true) {
+      printf("consume \n");
       // Get the next data to consume, or block while queue is empty
       const DataType& data = this->consumingQueue->pop();
       // If data is the stop condition, stop the loop
       if ( data == this->stopCondition ) {
+        printf("Stop condition\n");
         break;
       }
       // Process this data

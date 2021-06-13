@@ -11,8 +11,6 @@ class HttpConnectionHandler : public Consumer<Socket>{
 
     protected:
         /// Delay of consumer to consume a package, negative for max random
-        int consumerDelay = 5000;
-    
     public:
         /// Constructor
         explicit HttpConnectionHandler();

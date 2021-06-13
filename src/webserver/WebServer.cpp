@@ -33,14 +33,13 @@ WebServer& WebServer::getInstance(){
   return webServer;
 }
 
-void WebServer::stopListening(){
+void WebServer::stopServer(){
    this->stop(max_connections);
 }
 
 void WebServer::signalHandler(int signal){
   if(signal == SIGINT || signal == SIGTERM){
-  
-  
+    WebServer::getInstance().stopServer();
     WebServer::getInstance().stopListening();
     exit(0);
   }

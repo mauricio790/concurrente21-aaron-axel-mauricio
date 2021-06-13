@@ -11,12 +11,13 @@
 HttpConnectionHandler::HttpConnectionHandler()  {
 }
 
+
 void HttpConnectionHandler::sendStopCondition(){
   this->consumingQueue->push(this->stopCondition);
 }
 
 int HttpConnectionHandler::run(){
-  // Start the forever loop to consume all clien connectios
+  // Start the forever loop to consume all client connectios
   this->consumeForever();
   return EXIT_SUCCESS;
 }
@@ -49,7 +50,7 @@ void HttpConnectionHandler::consume(const Socket& client){
     const bool handled =  WebServer::getInstance().handleHttpRequest(httpRequest, httpResponse);
 
     // If subclass did not handle the request or the client used HTTP/1.0
-    if (!handled || httpRequest.getHttpVersion() == "HTTP/1.0") {
+    if (!handled || httpRequest.getHttpVersion() == "HTTP/1.1") {
       // The socket will not be more used, close the connection
       client.close();
       break;

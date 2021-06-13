@@ -23,7 +23,7 @@ class WebServer : public HttpServer {
   /// Handle HTTP requests. @see HttpServer::handleHttpRequest()
   bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) override;
-  void stopListening();
+  void stopServer();
   static void signalHandler(int signal);
 
 

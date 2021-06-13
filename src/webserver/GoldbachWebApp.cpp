@@ -96,7 +96,7 @@ bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest
   return httpResponse.send();
 }
 
-#include <unistd.h>
+//#include <unistd.h>
 
 // TODO(you) Move domain-logic from WebServer controller to a view class
 // e.g GoldbachWebApp, and a model class e.g GoldbachCalculator //listo
@@ -109,7 +109,7 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
   httpResponse.setHeader("Server", "AttoServer v1.0");
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
 
-  usleep(8000000);
+  //usleep(8000000);
   // Build the body of the response
   std::string title = "Goldbach sums for " + std::to_string(number);
   httpResponse.body() << "<!DOCTYPE html>\n"
