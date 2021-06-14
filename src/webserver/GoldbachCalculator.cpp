@@ -37,22 +37,15 @@ void GoldbachCalculator::goldbach(int64_t dato) {
 	bool esNegativo = false;
     /* Verifica si el numero ingresado es negativo para convertirlo a 
      * positivo pero guardando que es negativo.*/
-    if (dato < 0) {
+    if (dato < 0 && dato < -5) {
       esNegativo = true;
       dato = dato*(-1);
     }
-    // Verifica si el numero ingresado es mayor que 5 como se pide.
-    //if (dato > 5) {
-      // Verifica si el numero es par para ver cual conjuncion se le asigna
-      if (esPar(dato)) {
-       	conFuerte(dato, esNegativo);
-       } else {
-         	conDebil(dato, esNegativo);
-        }
-	   //} //else {
-        //sums_goldbach << dato << ": <br>";
-        //sums_goldbach << "<b>NA </b>" ;
-      //}
+    if (esPar(dato)) {
+      conFuerte(dato, esNegativo);
+    } else {
+        conDebil(dato, esNegativo);
+      }
   }
 /**
  * @brief Saca la conjetura fuerte de los numeros
@@ -121,6 +114,14 @@ void GoldbachCalculator::conDebil(int64_t numero,bool esNegativo) {
   }
   cant_sumGoldbach.push_back(cantidad);
 }
+/**
+ * @brief Saca la conjetura debil de los numeros
+ * @details Se verifica si el primer y segundo sumando es primo, si lo es pasa a verificar si el tercer sumando lo cumple,
+ * si lo cumple entonces verifica si la suma de esos tres sumandos es igual al numero del que queriamos sacar la conjetura
+ * y se determina si se puede sacar la conjetura del numero si se puede lo almacena en el vector, si este vector no cuenta con espascio
+ * lo incrementa
+ * @param numero del que vamos a sacar la conjetura, signo del numero, vector donde se almacenaran las sumas
+ * */
 void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers){
   
   std::vector<int64_t>::iterator it_nums = user_numbers->begin();
@@ -157,9 +158,6 @@ void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers){
     }
     ++it_cantsums; 
     ++it_nums;
-    //std::string sums = sums_goldbach.str();
-    //std::cout << sums <<std::endl;
-    //sums_goldbach.clear();
   }
 }
  
