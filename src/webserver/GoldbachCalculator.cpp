@@ -37,7 +37,7 @@ void GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
   }
   formarString(user_numbers);
   std::string sums = sums_goldbach.str();
-  std::cout << sums;
+  //std::cout << sums;
 }
 
 /**

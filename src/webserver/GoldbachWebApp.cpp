@@ -120,7 +120,7 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
 
   GoldbachCalculator goldbach_calc;
   goldbach_calc.leerDatos (user_numbers);
-  
+  std::string sums = goldbach_calc.sums_goldbach.str();
   // Set HTTP response metadata (headers)
   httpResponse.setHeader("Server", "AttoServer v1.0");
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
@@ -132,7 +132,8 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     << "  <meta charset=\"ascii\"/>\n"
     << "  <title>" << title << "</title>\n"
     << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-    << "  <h1>" << title << "</h1>\n";
+    << "  <h1>" << title << "</h1>\n"
+    << "<p>" << sums << "</p>\n";
     
   //-----------------
   // Send the response to the client (user agent)
