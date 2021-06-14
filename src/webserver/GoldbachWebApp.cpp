@@ -3,8 +3,6 @@
 #include <stdexcept> 
 #include <string>
 #include <vector>
-//borrar luego
-#include <iostream>
 
 #include "GoldbachWebApp.hpp"
 #include "GoldbachCalculator.hpp"
@@ -37,7 +35,6 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
 
     inQuery = ("(?!2C)(-?\\d+)");
     std::smatch num_matches;
-    std::cout << "URL:"<<matches[2] << std::endl;
     std::string numbers_in_URL = matches[2];
     
     while(std::regex_search(numbers_in_URL, num_matches, inQuery)){
@@ -121,13 +118,6 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers) {
   (void)httpRequest;
 
-  //Borrar ---------------------
-  std::cout << "user numbers:" << std::endl;
-  for(std::vector<int64_t>::iterator it = user_numbers->begin();
-    it != user_numbers->end(); ++it){
-      std::cout << ' ' << *it;  
-  }
-  //-----------------
   GoldbachCalculator goldbach_calc;
   goldbach_calc.leerDatos (user_numbers);
   
@@ -135,7 +125,6 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
   httpResponse.setHeader("Server", "AttoServer v1.0");
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
 
-  //usleep(8000000);
   // Build the body of the response
   std::string title = "Goldbach sums for "; // + std::to_string(number);
   httpResponse.body() << "<!DOCTYPE html>\n"
@@ -144,53 +133,7 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     << "  <title>" << title << "</title>\n"
     << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
     << "  <h1>" << title << "</h1>\n";
-    /*
-    << "  <h2>25</h2>\n"
-    << "  <p>25: 5 sums</p>\n"
-    << "  <h2 class=\"err\">-3</h2>\n"
-    << "  <p>-3: NA</p>\n"
-    << "  <h2>-13</h2>\n"
-    << "  <p>-13: 2 sums</p>\n"
-    << "  <ol>\n"
-    << "    <li>3 + 3 + 7</li>\n"
-    << "    <li>3 + 5 + 5</li>\n"
-    << "  </ol>\n"
-    << "  <hr><p><a href=\"/\">Back</a></p>\n"
-    << "</html>\n";*/
-  
-  //Borrar ---------------------
-  //std::cout << "Goldbach calc:\n" << std::endl;
-  std::vector<int64_t>::iterator it_nums = user_numbers->begin();
-  std::vector<int>::iterator it_cantsums = goldbach_calc.cant_sumGoldbach.begin();
-  int cantidad_sumas_totales = 0;
-
-  while(it_cantsums != goldbach_calc.cant_sumGoldbach.end()){
-    int cant_sumas = *it_cantsums;
-    int cantidad_sumas = goldbach_calc.cant_sumGoldbach[1];
-    httpResponse.body() << "<h2>" << *it_nums << "</h2>\n";
-    httpResponse.body() << "<p>" << cant_sumas << "</p>\n";
     
-    if(*it_nums < 0){
-      while(cantidad_sumas_totales < cantidad_sumas){
-        httpResponse.body() << "<p>" << goldbach_calc.sumGoldbach[cantidad_sumas_totales].num1
-          << "+" << goldbach_calc.sumGoldbach[cantidad_sumas_totales].num2;
-          if (goldbach_calc.sumGoldbach[cantidad_sumas_totales].num3 != 0){
-            httpResponse.body() << "+" << goldbach_calc.sumGoldbach[cantidad_sumas_totales].num3 << "</p>\n";
-          }
-        ++cantidad_sumas_totales;
-      }
-    }
-
-    if(*(it_nums+1) < 0){
-      //httpResponse.body() << "<h2>"<< "+" << *(it_nums+1) << "</h2>\n";
-      ++it_cantsums;
-      cantidad_sumas += *it_cantsums;
-    } else {
-      ++it_cantsums;
-    }
-
-    ++it_nums;
-  }
   //-----------------
   // Send the response to the client (user agent)
   return httpResponse.send();
