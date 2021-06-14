@@ -14,15 +14,15 @@ GoldbachCalculator::GoldbachCalculator() {
  }
  
 /*int main(void) {
-  int64_t numeros =-3;
+  int64_t numeros =-100;
   std::vector<int64_t> user_numbers;
   user_numbers.push_back(numeros);
-  //user_numbers.push_back(10);
-  
+  user_numbers.push_back(50);
+  user_numbers.push_back(-12);
+  user_numbers.push_back(9);
   GoldbachCalculator calculator;
+
   calculator.leerDatos(&user_numbers);
-  //calculator.formarString(&user_numbers);
-  //std::cout << calculator.sums_goldbach << std::endl;
   return 0;
 }*/
 /**
@@ -32,16 +32,14 @@ GoldbachCalculator::GoldbachCalculator() {
  * */
 void GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
   //std::vector<GoldbachCalculator::Sumas>* ejemplo = (std::vector<GoldbachCalculator::Sumas>*);
-  //std::string sums = sums_goldbach.str();
-  //std::cout << sums << std::endl;
   for (std::vector<int64_t>::iterator it = user_numbers->begin() ;it != user_numbers->end(); it++) {
-    sums_goldbach << *it << ": ";
-  	goldbach(*it);
-    formarString(user_numbers);
-    std::string sums = sums_goldbach.str();
-    std::cout << sums << std::endl;
+    goldbach(*it);
   }
+  formarString(user_numbers);
+  std::string sums = sums_goldbach.str();
+  std::cout << sums;
 }
+
 /**
  * @brief Verificacion de los datos leidos 
  * @details Verifica que los numeros sean mayores que 5, si es negativo o positivo y determina cual es la conjetura de dicho numero si es fuerte o debil. Se crea el vector
@@ -61,14 +59,13 @@ void GoldbachCalculator::goldbach(int64_t dato) {
       // Verifica si el numero es par para ver cual conjuncion se le asigna
       if (esPar(dato)) {
        	conFuerte(dato, esNegativo);
-      } else {
+       } else {
          	conDebil(dato, esNegativo);
         }
-	}
-  else {
-    sums_goldbach << "NA";
+	   } else {
+        sums_goldbach << "NA";
+      }
   }
-}
 /**
  * @brief Saca la conjetura fuerte de los numeros
  * @details Se verifica si el primer sumando es primo, si los es se busca el segundo sumando que es la resta entre el numero
@@ -91,7 +88,6 @@ void GoldbachCalculator::conFuerte(int64_t numero,bool esNegativo) {
             sumas.num2 = numero - num_1;
             sumas.num3 =0;
             sumGoldbach.push_back(sumas);
-            //formarString(sumas);
         }
       }
     }
@@ -138,40 +134,36 @@ void GoldbachCalculator::conDebil(int64_t numero,bool esNegativo) {
   cant_sumGoldbach.push_back(cantidad);
 }
 void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers){
+  
   std::vector<int64_t>::iterator it_nums = user_numbers->begin();
   std::vector<int>::iterator it_cantsums = cant_sumGoldbach.begin();
-  int cantidad_sumas_totales = 0;
-  int index =0;
-  int cantidad_sumas = 0;
+  int index_sumas = 0;
+  int maximo_index = 0;
   while(it_cantsums != cant_sumGoldbach.end()){
     int cant_sumas = *it_cantsums;
-    //Falta probbarlo
-    if (*it_nums < 0) {
-        cantidad_sumas = cant_sumGoldbach[index];
-        index++;
-    }
-    sums_goldbach << cant_sumas << "sums \n";
-    if(*it_nums < 0){
-      while(cantidad_sumas_totales < cantidad_sumas){
-        sums_goldbach << sumGoldbach[cantidad_sumas_totales].num1 << "+" << sumGoldbach[cantidad_sumas_totales].num2;
-        if (sumGoldbach[cantidad_sumas_totales].num3 != 0){
-          sums_goldbach << "+" << sumGoldbach[cantidad_sumas_totales].num3 << "\n";
+    sums_goldbach << *it_nums << ": ";
+    sums_goldbach << cant_sumas << " sums \n";
+    if(*it_nums < 0){ 
+      maximo_index = *it_cantsums + maximo_index;
+      //std::cout<<"maximo_index"<<maximo_index<<std::endl;
+      //std::cout<<"index_sumas"<<index_sumas<<std::endl;
+      while(index_sumas < maximo_index){
+       sums_goldbach << sumGoldbach[index_sumas].num1 << "+" << sumGoldbach[index_sumas].num2;
+        if (sumGoldbach[index_sumas].num3 != 0){
+          sums_goldbach << "+" << sumGoldbach[index_sumas].num3;
         }
-        ++cantidad_sumas_totales;
+        sums_goldbach << std::endl;
+        ++index_sumas;
       }
     }
-    if(*(it_nums+1) < 0){
-      //httpResponse.body() << "<h2>"<< "+" << *(it_nums+1) << "</h2>\n";
-      ++it_cantsums;
-      cantidad_sumas += *it_cantsums;
-    } else {
-      ++it_cantsums;
-    }
+    ++it_cantsums; 
+    ++it_nums;
+    //std::string sums = sums_goldbach.str();
+    //std::cout << sums <<std::endl;
+    //sums_goldbach.clear();
   }
 }
-
-
-
+ 
 /**
  * @brief Determina si un numero es par
  * @details divide el numero para ver si es divisible entre 2
