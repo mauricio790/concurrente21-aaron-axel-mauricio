@@ -12,19 +12,6 @@ GoldbachCalculator::GoldbachCalculator() {
  }
  GoldbachCalculator::~GoldbachCalculator() {
  }
- 
-/*int main(void) {
-  int64_t numeros =-100;
-  std::vector<int64_t> user_numbers;
-  user_numbers.push_back(numeros);
-  user_numbers.push_back(50);
-  user_numbers.push_back(-12);
-  user_numbers.push_back(9);
-  GoldbachCalculator calculator;
-
-  calculator.leerDatos(&user_numbers);
-  return 0;
-}*/
 /**
  * @brief Lee cada numero 
  * @details Lee los numeros como una cadena y los covierte a int64_t y despues los envia para comenzar a sacar la conjetura.Se define la longitud del vector de structs
@@ -55,16 +42,17 @@ void GoldbachCalculator::goldbach(int64_t dato) {
       dato = dato*(-1);
     }
     // Verifica si el numero ingresado es mayor que 5 como se pide.
-    if (dato > 5) {
+    //if (dato > 5) {
       // Verifica si el numero es par para ver cual conjuncion se le asigna
       if (esPar(dato)) {
        	conFuerte(dato, esNegativo);
        } else {
          	conDebil(dato, esNegativo);
         }
-	   } else {
-        sums_goldbach << "NA";
-      }
+	   //} //else {
+        //sums_goldbach << dato << ": <br>";
+        //sums_goldbach << "<b>NA </b>" ;
+      //}
   }
 /**
  * @brief Saca la conjetura fuerte de los numeros
@@ -140,21 +128,32 @@ void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers){
   int index_sumas = 0;
   int maximo_index = 0;
   while(it_cantsums != cant_sumGoldbach.end()){
+
     int cant_sumas = *it_cantsums;
-    sums_goldbach << *it_nums << ": ";
-    sums_goldbach << cant_sumas << " sums \n";
-    if(*it_nums < 0){ 
+    if(*it_nums > -5 && *it_nums < 5){
+        sums_goldbach << "<B><FONT COLOR=red><h2>"<< *it_nums<<"</h2></FONT></B>";
+        sums_goldbach << *it_nums << ": ";
+        sums_goldbach << "NA";
+    } else {
+      sums_goldbach << "<h2>"<< *it_nums << "</h2 <br>";
+      sums_goldbach << *it_nums << ": ";
+      sums_goldbach << cant_sumas << " sums <br>";
+    }
+    if(*it_nums < 0){
       maximo_index = *it_cantsums + maximo_index;
       //std::cout<<"maximo_index"<<maximo_index<<std::endl;
       //std::cout<<"index_sumas"<<index_sumas<<std::endl;
+      int contador_sumas = 1;
       while(index_sumas < maximo_index){
-       sums_goldbach << sumGoldbach[index_sumas].num1 << "+" << sumGoldbach[index_sumas].num2;
+       sums_goldbach << contador_sumas << ". " << sumGoldbach[index_sumas].num1 << " + " << sumGoldbach[index_sumas].num2;
         if (sumGoldbach[index_sumas].num3 != 0){
-          sums_goldbach << "+" << sumGoldbach[index_sumas].num3;
+          sums_goldbach << " + " << sumGoldbach[index_sumas].num3;
         }
-        sums_goldbach << std::endl;
+        sums_goldbach << "<br>";
         ++index_sumas;
+        ++contador_sumas;
       }
+      sums_goldbach << "<br>";
     }
     ++it_cantsums; 
     ++it_nums;
