@@ -131,7 +131,7 @@ void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers){
   while(it_cantsums != cant_sumGoldbach.end()){
 
     int cant_sumas = *it_cantsums;
-    if(*it_nums > -5 && *it_nums < 5){
+    if(*it_nums >= -5 && *it_nums <= 5){
         sums_goldbach << "<B><FONT COLOR=red><h2>"<< *it_nums<<"</h2></FONT></B>";
         sums_goldbach << *it_nums << ": ";
         sums_goldbach << "NA";
