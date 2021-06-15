@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <signal.h>
+#include <unistd.h>
 
 #include "GoldbachWebApp.hpp"
 #include "NetworkAddress.hpp"
@@ -88,7 +89,11 @@ bool WebServer::analyzeArguments(int argc, char* argv[]) {
     this->port = argv[1];
     sscanf(argv[2], "%i", &max_connections);
     printf("max connections: %i\n", this->max_connections);
-  }
+  } else {
+      if (argc <= 2) {
+          max_connections = sysconf(_SC_NPROCESSORS_ONLN);
+        }
+      }
 
   return true;
 }
