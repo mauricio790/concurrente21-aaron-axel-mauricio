@@ -12,22 +12,24 @@ GoldbachWebApp::GoldbachWebApp(){
   
 GoldbachWebApp::~GoldbachWebApp(){
 }
-
+/**
+ * @brief Provide an answer according to the client Request
+ * @details If the client enter one or more comma separated values (directly in the URL or using the text box
+ * in the home page), the subroutine extract all values using regular expressions, check if the value is larger
+ * than a int64_t, if isn't add the values to a vector of int64_t and call serveGoldbachSums()
+ * If the user puts a value larger than int64_t the request is rejected
+ * @param httpRequest Http request (client request)
+ * @param httpResponse Http response
+ * @return a boolean to check if httpResponse could send the response.
+ * */
 bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse) {
   // If the home page was asked
   if (httpRequest.getMethod() == "GET" && httpRequest.getURI() == "/") {
     return this->serveHomepage(httpRequest, httpResponse);
   }
-
-  // TODO(you): URI can be a multi-value list, e.g: 100,2784,-53,200771728 //Listo
-  // TODO(you): change for sendGoldbachSums() if you prefer it
   std::smatch matches;
-
-  // TODO(you): Numbers given by user may be larger than int64_t, reject them
-
   // If a number was asked in the form "/goldbach/1223"
-  // or "/goldbach?number=1223"
-  // or "/goldbach?text=1223"
+  // or "/goldbach?number=1223" or "/goldbach?text=1223"
   std::regex inQuery("^/goldbach(/|\\?number=|\\?text=)(((-?\\d+)(,|%2C)?)+)$");
   if (std::regex_search(httpRequest.getURI(), matches, inQuery)) {
     assert(matches.length() >= 3);
@@ -36,7 +38,7 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
     inQuery = ("(?!2C)(-?\\d+)");
     std::smatch num_matches;
     std::string numbers_in_URL = matches[2];
-    
+    // extract all numbers in the URL using regular expressions
     while(std::regex_search(numbers_in_URL, num_matches, inQuery)){
       try {
         int64_t number = std::stoll(num_matches[1]);
@@ -48,23 +50,21 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
     }
     return this->serveGoldbachSums(httpRequest, httpResponse, &user_numbers);
   }
-
   // Unrecognized request
   return this->serveNotFound(httpRequest, httpResponse);
 }
 
-// TODO(you): Fix code redundancy in the following methods
-
+/**
+ * @brief Sends the homepage as HTTP response
+ * @param httpRequest Http request (client request)
+ * @param httpResponse Http response
+ * @return a boolean to check if httpResponse could send the response.
+ * */
 bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
   , HttpResponse& httpResponse) {
   (void)httpRequest;
 
-  // TODO(you) Move form to your view class, e.g GoldbachWebApp
-
-  // Set HTTP response metadata (headers)
-  httpResponse.setHeader("Server", "AttoServer v1.0");
-  httpResponse.setHeader("Content-type", "text/html; charset=ascii");
-
+  setHeaders(0);
   // Build the body of the response
   std::string title = "Goldbach sums";
   httpResponse.body() << "<!DOCTYPE html>\n"
@@ -83,15 +83,18 @@ bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
   // Send the response to the client (user agent)
   return httpResponse.send();
 }
-
+/**
+ * @brief Sends a page for a non found resouce in this server
+ * @details The error code send is 404, sends the response in HTML format as HTTP response
+ * @param httpRequest Http request (client request)
+ * @param httpResponse Http response
+ * @return a boolean to check if httpResponse could send the response.
+ * */
 bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest
   , HttpResponse& httpResponse) {
   (void)httpRequest;
 
-  // Set HTTP response metadata (headers)
-  httpResponse.setStatusCode(404);
-  httpResponse.setHeader("Server", "AttoServer v1.0");
-  httpResponse.setHeader("Content-type", "text/html; charset=ascii");
+  setHeaders(404);
 
   // Build the body of the response
   std::string title = "Not found";
@@ -109,22 +112,22 @@ bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest
   return httpResponse.send();
 }
 
-//#include <unistd.h>
-
-// TODO(you) Move domain-logic from WebServer controller to a view class
-// e.g GoldbachWebApp, and a model class e.g GoldbachCalculator //listo
-
+/**
+ * @brief Calculate the goldbach sums of a number asked by the client
+ * @details Sends the response in HTML format as HTTP response
+ * @param httpRequest Http request (client request)
+ * @param httpResponse Http response
+ * @param user_numbers Vector of type int64_t, contains the client values
+ * @return a boolean to check if httpResponse could send the response.
+ * */
 bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers) {
   (void)httpRequest;
-
   GoldbachCalculator goldbach_calc;
   goldbach_calc.leerDatos (user_numbers);
-  
-  // Set HTTP response metadata (headers)
-  httpResponse.setHeader("Server", "AttoServer v1.0");
-  httpResponse.setHeader("Content-type", "text/html; charset=ascii");
+  std::string sums = goldbach_calc.sums_goldbach.str();
 
+  setHeaders(0);
   // Build the body of the response
   std::string title = "Goldbach sums for "; // + std::to_string(number);
   httpResponse.body() << "<!DOCTYPE html>\n"
@@ -132,9 +135,23 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     << "  <meta charset=\"ascii\"/>\n"
     << "  <title>" << title << "</title>\n"
     << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-    << "  <h1>" << title << "</h1>\n";
+    << "  <h1>" << title << "</h1>\n"
+    << "<p>" << sums << "</p>\n";
     
   //-----------------
   // Send the response to the client (user agent)
   return httpResponse.send();
+}
+/**
+ * @brief Set HTTP response metadata (headers)
+ * @details Set the headers of HTTP response
+ * @param error_code
+ * */
+void setHeaders(int error)){
+  if(error == 404)
+    httpResponse.setStatusCode(404);
+
+  httpResponse.setHeader("Server", "AttoServer v1.0");
+  httpResponse.setHeader("Content-type", "text/html; charset=ascii");
+
 }

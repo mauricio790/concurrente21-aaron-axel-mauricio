@@ -3,7 +3,10 @@
 #define GOLDBACHWEBAPP_H
 
 #include "WebServer.hpp"
-
+/**
+ * @brief A class that receives the HTTP requests made by the client, extract the numbers and
+ * use the GoldbachCalculator to proccess the numbers and generate the HTTP response.S
+ */
 class GoldbachWebApp{
   DISABLE_COPY(GoldbachWebApp);
 
@@ -19,10 +22,12 @@ public:
   bool serveHomepage(HttpRequest& httpRequest, HttpResponse& httpResponse);
   /// Sends a page for a non found resouce in this server
   bool serveNotFound(HttpRequest& httpRequest, HttpResponse& httpResponse);
-  /// Calculate the prime factorization of a number asked by the client, and
+  /// Calculate the goldbach sums of a number asked by the client, and
   /// sends the response in HTML format as HTTP response
   bool serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers);
+  // Set HTTP response metadata (headers)
+  void setHeaders(int error);
 
 };
 
