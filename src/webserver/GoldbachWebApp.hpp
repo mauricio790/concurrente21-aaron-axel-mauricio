@@ -27,7 +27,7 @@ public:
   bool serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers);
   // Set HTTP response metadata (headers)
-  void setHeaders(int error);
+  void setHeaders(HttpResponse& httpResponse,int error);
 
 };
 
