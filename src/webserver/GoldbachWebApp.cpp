@@ -64,7 +64,7 @@ bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
   , HttpResponse& httpResponse) {
   (void)httpRequest;
 
-  setHeaders(0);
+  setHeaders(httpResponse,0);
   // Build the body of the response
   std::string title = "Goldbach sums";
   httpResponse.body() << "<!DOCTYPE html>\n"
@@ -94,7 +94,7 @@ bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest
   , HttpResponse& httpResponse) {
   (void)httpRequest;
 
-  setHeaders(404);
+  setHeaders(httpResponse,404);
 
   // Build the body of the response
   std::string title = "Not found";
@@ -127,7 +127,7 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
   goldbach_calc.leerDatos (user_numbers);
   std::string sums = goldbach_calc.sums_goldbach.str();
 
-  setHeaders(0);
+  setHeaders(httpResponse,0);
   // Build the body of the response
   std::string title = "Goldbach sums for "; // + std::to_string(number);
   httpResponse.body() << "<!DOCTYPE html>\n"
@@ -145,9 +145,11 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
 /**
  * @brief Set HTTP response metadata (headers)
  * @details Set the headers of HTTP response
+ * @param httpRequest Http request (client request)
+ * @param httpResponse Http response
  * @param error_code
  * */
-void setHeaders(int error)){
+void GoldbachWebApp::setHeaders (HttpResponse& httpResponse, int error) {
   if(error == 404)
     httpResponse.setStatusCode(404);
 
