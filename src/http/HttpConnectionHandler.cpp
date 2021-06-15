@@ -28,7 +28,7 @@ int HttpConnectionHandler::run(){
 
 /**
  * @brief This method consumed data from its own queue while it still has requests from the same client
- * @param const Socket& client is the element consumed form its own queue
+ * @param client Socket& client is the element consumed form its own queue
  */
 void HttpConnectionHandler::consume(const Socket& client){
   

@@ -145,9 +145,8 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
 /**
  * @brief Set HTTP response metadata (headers)
  * @details Set the headers of HTTP response
- * @param httpRequest Http request (client request)
  * @param httpResponse Http response
- * @param error_code
+ * @param error codigo de error
  * */
 void GoldbachWebApp::setHeaders (HttpResponse& httpResponse, int error) {
   if(error == 404)

@@ -55,7 +55,7 @@ class Log {
   /// @param type A constant: DEBUG, INFO, WARNING, ERROR.
   /// @param category Any text that is useful for distinguish messages, such as
   /// the name of the module or class, e.g: producer or socket
-  /// @param text Text should not contain tab characters ('\t')
+  /// @param text Text should not contain tab characters
   /// @throw std::runtime_error if record could not be written
   static inline void append(MessageType type, const std::string& category
     , const std::string& text) {
