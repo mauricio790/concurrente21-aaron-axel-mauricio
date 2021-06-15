@@ -12,9 +12,9 @@
 class HttpConnectionHandler : public Consumer<Socket>{
     DISABLE_COPY(HttpConnectionHandler);
 
-    protected:
+ protected:
         /// Delay of consumer to consume a package, negative for max random
-    public:
+ public:
         /// Constructor
         explicit HttpConnectionHandler();
         /// Consume the clients in its own execution thread
@@ -22,7 +22,6 @@ class HttpConnectionHandler : public Consumer<Socket>{
         /// Override this method to process any data extracted from the queue
         void consume(const Socket& client) override;
         void sendStopCondition();
-        
 };
 
-#endif  //HTTPCONNECTIONHANDLER_H
+#endif  // HTTPCONNECTIONHANDLER_H

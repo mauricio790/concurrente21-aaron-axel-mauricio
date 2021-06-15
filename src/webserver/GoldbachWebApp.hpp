@@ -1,7 +1,7 @@
-
 #ifndef GOLDBACHWEBAPP_H
 #define GOLDBACHWEBAPP_H
 
+#include <vector>
 #include "WebServer.hpp"
 /**
  * @brief A class that receives the HTTP requests made by the client, extract the numbers and
@@ -10,10 +10,10 @@
 class GoldbachWebApp{
   DISABLE_COPY(GoldbachWebApp);
 
-public:
-  //Constructor
+ public:
+  // Constructor
   GoldbachWebApp();
-  //Destructor
+  // Destructor
   ~GoldbachWebApp();
   /// Route, that provide an answer according to the URI value
   /// For example, home page is handled different than a number
@@ -27,8 +27,7 @@ public:
   bool serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers);
   // Set HTTP response metadata (headers)
-  void setHeaders(HttpResponse& httpResponse,int error);
-
+  void setHeaders(HttpResponse& httpResponse, int error);
 };
 
 #endif

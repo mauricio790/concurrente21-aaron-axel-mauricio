@@ -12,10 +12,7 @@
 
 
 int main(int argc, char* argv[]) {
-  
   int retorno = WebServer::getInstance().start(argc, argv);
   return retorno;
-
 }
-
 #endif  // WEBSERVER

@@ -13,14 +13,14 @@ HttpConnectionHandler::HttpConnectionHandler()  {
 /**
  * @brief This method sends a stop condition to its own queue to stop consuming.
  */
-void HttpConnectionHandler::sendStopCondition(){
+void HttpConnectionHandler::sendStopCondition() {
   this->consumingQueue->push(this->stopCondition);
 }
 
 /**
  * @brief This method is called when the thread is start it. Once called, it consumes forever from its own queue
  */
-int HttpConnectionHandler::run(){
+int HttpConnectionHandler::run() {
   // Start the forever loop to consume all client connectios
   this->consumeForever();
   return EXIT_SUCCESS;
@@ -30,13 +30,11 @@ int HttpConnectionHandler::run(){
  * @brief This method consumed data from its own queue while it still has requests from the same client
  * @param client Socket& client is the element consumed form its own queue
  */
-void HttpConnectionHandler::consume(const Socket& client){
-  
+void HttpConnectionHandler::consume(const Socket& client) {
   (void)client;
   // TODO(you) Move the following loop to a consumer thread class -- Done
   // While the same client asks for HTTP requests in the same connection
   while (true) {
-    
     // Create an object that parses the HTTP request from the socket
     HttpRequest httpRequest(client);
 
@@ -53,7 +51,8 @@ void HttpConnectionHandler::consume(const Socket& client){
     HttpResponse httpResponse(client);
 
     // Give subclass a chance to respond the HTTP request
-    const bool handled =  WebServer::getInstance().handleHttpRequest(httpRequest, httpResponse);
+    const bool handled =
+    WebServer::getInstance().handleHttpRequest(httpRequest, httpResponse);
 
     // If subclass did not handle the request or the client used HTTP/1.0
     if (!handled || httpRequest.getHttpVersion() == "HTTP/1.1") {
