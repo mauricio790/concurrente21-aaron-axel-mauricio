@@ -27,7 +27,6 @@ void HttpServer::listenForever(const char* port) {
  * @param int max_connections holds the number of maximum connections of the server
  */
 void HttpServer::startThreads(int max_connections) {
-  
   // Create each consumer
   this->connectionHandlers.resize(max_connections);
   for ( int index = 0; index < max_connections; ++index ) {
@@ -40,15 +39,14 @@ void HttpServer::startThreads(int max_connections) {
   for ( int index = 0; index < max_connections; ++index ) {
     this->connectionHandlers[index]->startThread();
   }
-
 }
 
 /**
  * @brief This method stops all threads from consuming by sending stop conditions and waits for all secondary threads to stop  
  * @param int max_connections holds the number of maximum connections of the server
  */
-void HttpServer::stop(int max_connections){
-  //Send stop conditions
+void HttpServer::stop(int max_connections) {
+  // Send stop conditions
   for ( int index = 0; index < max_connections; ++index ) {
     this->connectionHandlers[index]->sendStopCondition();
   }
@@ -61,7 +59,7 @@ void HttpServer::stop(int max_connections){
  * @brief This method stores client connections into a Queue
  */
 void HttpServer::handleClientConnection(Socket& client) {
-  // TODO(you): Make this method concurrent. 
+  // TODO(you): Make this method concurrent.
   clients_queue.push(client);
-  //Listo
+  // Listo
 }

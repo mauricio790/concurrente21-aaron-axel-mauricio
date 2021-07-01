@@ -1,16 +1,13 @@
-
 #include <regex>
-#include <stdexcept> 
+#include <stdexcept>
 #include <string>
 #include <vector>
-
 #include "GoldbachWebApp.hpp"
 #include "GoldbachCalculator.hpp"
 
-GoldbachWebApp::GoldbachWebApp(){
+GoldbachWebApp::GoldbachWebApp() {
 }
-  
-GoldbachWebApp::~GoldbachWebApp(){
+GoldbachWebApp::~GoldbachWebApp() {
 }
 /**
  * @brief Provide an answer according to the client Request
@@ -22,7 +19,8 @@ GoldbachWebApp::~GoldbachWebApp(){
  * @param httpResponse Http response
  * @return a boolean to check if httpResponse could send the response.
  * */
-bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse) {
+bool GoldbachWebApp::route(HttpRequest& httpRequest,
+HttpResponse& httpResponse) {
   // If the home page was asked
   if (httpRequest.getMethod() == "GET" && httpRequest.getURI() == "/") {
     return this->serveHomepage(httpRequest, httpResponse);
@@ -39,11 +37,11 @@ bool GoldbachWebApp::route(HttpRequest& httpRequest, HttpResponse& httpResponse)
     std::smatch num_matches;
     std::string numbers_in_URL = matches[2];
     // extract all numbers in the URL using regular expressions
-    while(std::regex_search(numbers_in_URL, num_matches, inQuery)){
+    while (std::regex_search(numbers_in_URL, num_matches, inQuery)) {
       try {
         int64_t number = std::stoll(num_matches[1]);
-        user_numbers.push_back(number); 
-      } catch (const std::out_of_range& out_of_range){
+        user_numbers.push_back(number);
+      } catch (const std::out_of_range& out_of_range) {
         return this->serveNotFound(httpRequest, httpResponse);
       }
       numbers_in_URL = num_matches.suffix().str();
@@ -64,7 +62,7 @@ bool GoldbachWebApp::serveHomepage(HttpRequest& httpRequest
   , HttpResponse& httpResponse) {
   (void)httpRequest;
 
-  setHeaders(httpResponse,0);
+  setHeaders(httpResponse, 0);
   // Build the body of the response
   std::string title = "Goldbach sums";
   httpResponse.body() << "<!DOCTYPE html>\n"
@@ -94,7 +92,7 @@ bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest
   , HttpResponse& httpResponse) {
   (void)httpRequest;
 
-  setHeaders(httpResponse,404);
+  setHeaders(httpResponse, 404);
 
   // Build the body of the response
   std::string title = "Not found";
@@ -124,12 +122,12 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers) {
   (void)httpRequest;
   GoldbachCalculator goldbach_calc;
-  goldbach_calc.leerDatos (user_numbers);
+  goldbach_calc.leerDatos(user_numbers);
   std::string sums = goldbach_calc.sums_goldbach.str();
 
-  setHeaders(httpResponse,0);
+  setHeaders(httpResponse, 0);
   // Build the body of the response
-  std::string title = "Goldbach sums for "; // + std::to_string(number);
+  std::string title = "Goldbach sums for ";  // + std::to_string(number);
   httpResponse.body() << "<!DOCTYPE html>\n"
     << "<html lang=\"en\">\n"
     << "  <meta charset=\"ascii\"/>\n"
@@ -137,7 +135,6 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
     << "  <h1>" << title << "</h1>\n"
     << "<p>" << sums << "</p>\n";
-    
   //-----------------
   // Send the response to the client (user agent)
   return httpResponse.send();
@@ -148,11 +145,10 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
  * @param httpResponse Http response
  * @param error codigo de error
  * */
-void GoldbachWebApp::setHeaders (HttpResponse& httpResponse, int error) {
-  if(error == 404)
+void GoldbachWebApp::setHeaders(HttpResponse& httpResponse, int error) {
+  if (error == 404)
     httpResponse.setStatusCode(404);
 
   httpResponse.setHeader("Server", "AttoServer v1.0");
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
-
 }

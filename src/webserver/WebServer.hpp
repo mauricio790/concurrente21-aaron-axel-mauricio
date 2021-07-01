@@ -19,7 +19,7 @@ class WebServer : public HttpServer {
  public:
   /// Get access to the unique instance of this Singleton class
   static WebServer& getInstance();
-  //Start
+  // Start
   int start(int argc, char* argv[]);
   /// Handle HTTP requests. @see HttpServer::handleHttpRequest()
   bool handleHttpRequest(HttpRequest& httpRequest,
@@ -27,20 +27,15 @@ class WebServer : public HttpServer {
   void stopServer();
   static void signalHandler(int signal);
 
-
  protected:
   /// Analyze the command line arguments
   /// @return true if program can continue execution, false otherwise
   bool analyzeArguments(int argc, char* argv[]);
-  
-  
-
  private:
   /// Constructor
   WebServer();
   /// Destructor
   ~WebServer();
- 
 };
 
 #endif  // WEBSERVER_H

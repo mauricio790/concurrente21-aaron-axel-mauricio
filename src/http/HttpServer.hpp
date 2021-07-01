@@ -22,7 +22,7 @@ class HttpServer : public TcpServer {
   Queue <Socket> clients_queue;
   std::vector<HttpConnectionHandler*> connectionHandlers;
 
-protected:
+ protected:
   /// Lookup criteria for searching network information about this host
   struct addrinfo hints;
 
@@ -35,11 +35,11 @@ protected:
   /// For each accepted connection request, the virtual onConnectionAccepted()
   /// will be called. Inherited classes must override that method
   void listenForever(const char* port);
-  void startThreads( int max_connections);
+  void startThreads(int max_connections);
   virtual bool handleHttpRequest(HttpRequest& httpRequest,
     HttpResponse& httpResponse) = 0;
   void stop(int max_connections);
- 
+
  protected:
   /// This method is called each time a client connection request is accepted.
   void handleClientConnection(Socket& client) override;
@@ -49,8 +49,6 @@ protected:
   /// @return true on success and the server will continue handling further
   /// HTTP requests, or false if server should stop accepting requests from
   /// this client (e.g: HTTP/1.0)
-  
-       
 };
 
 #endif  // HTTPSERVER_H
