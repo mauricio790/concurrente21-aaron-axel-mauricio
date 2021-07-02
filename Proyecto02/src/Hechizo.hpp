@@ -12,18 +12,19 @@
 
 class Hechizo{
     public:
+
+        std::ofstream salida;
+
         Hechizo();
         ~Hechizo();
-        int cant_arboles;
-        int cant_lagos;
-        std::string bosqu;
-        std::string mapa;
         //crea un mapa y se deja la cantidad de medias noches
         void hechizar(std::string mapa); 
-        void verificarReglas(const size_t &i);
-        void verificarCelda(std::string prueba,size_t i);
+        void hechizarMapa(Mapa& mapa,int medias_noches);
+        std::string verificarReglas(Mapa& mapa,const size_t &i,size_t cant_arboles, size_t cant_lagos);
+        std::string verificarVecinos(Mapa& mapa,std::string prueba,size_t i);
 
     private:
+        void escribirMapa(Mapa& mapa,size_t noche);
     protected:
 };
 

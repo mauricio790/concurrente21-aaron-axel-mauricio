@@ -1,1 +1,1 @@
-jobs/maps001.txt -1
+jobs/map001.txt -10

@@ -12,9 +12,8 @@ class Mapa{
         size_t filas;
         size_t columnas;
         size_t area;
-        std::string vecinos;
         std::string mapa;
-        std::string verificarVecinos (const size_t &i);
+        std::string obtenerVecinos(const size_t &i);
 };
 
 #endif

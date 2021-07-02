@@ -28,8 +28,6 @@ Mapa::Mapa(std::string ruta){
                      <<"Se omiten los caracteres restantes"<<std::endl;
                     advertencia = true;
                 }
-                //char* inicio = this->mapa + (lineas_leidas * this->columnas); 
-                //std::memcpy(inicio,linea.c_str(),this->columnas);
                 mapa += linea;
                 ++lineas_leidas;
             }else{
@@ -42,11 +40,12 @@ Mapa::Mapa(std::string ruta){
 }
 Mapa::~Mapa(){
 }
-std::string Mapa::verificarVecinos(const size_t &i){
+std::string Mapa::obtenerVecinos(const size_t &i){
     bool norte = false;
     bool sur = false;
     bool este = false;
     bool oeste = false;
+    std::string vecinos = "";
     if (i >= columnas)
     { //norte
         vecinos += mapa[i - columnas];
