@@ -9,15 +9,12 @@ class Mapa{
         Mapa() = delete;
         explicit Mapa(std::string ruta);
         ~Mapa();
-    private:
-    protected:
-
-    public:
         size_t filas;
         size_t columnas;
         size_t area;
-
-        char* mapa = nullptr;
+        std::string vecinos;
+        std::string mapa;
+        std::string verificarVecinos (const size_t &i);
 };
 
 #endif

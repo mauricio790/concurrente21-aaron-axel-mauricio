@@ -13,7 +13,7 @@ Mapa::Mapa(std::string ruta){
         this->filas = std::stoi(linea.substr(0,espacio));
         this->columnas = std::stoi(linea.substr(espacio + 1));
         this->area = filas*columnas;
-        this->mapa = new char(this->area);
+        this->mapa = "";
 
         size_t lineas_leidas = 0;
         bool advertencia = false;
@@ -28,8 +28,9 @@ Mapa::Mapa(std::string ruta){
                      <<"Se omiten los caracteres restantes"<<std::endl;
                     advertencia = true;
                 }
-                char* inicio = this->mapa + (lineas_leidas * this->columnas); 
-                std::memcpy(inicio,linea.c_str(),this->columnas);
+                //char* inicio = this->mapa + (lineas_leidas * this->columnas); 
+                //std::memcpy(inicio,linea.c_str(),this->columnas);
+                mapa += linea;
                 ++lineas_leidas;
             }else{
                 throw std::runtime_error("línea inválida");
@@ -39,7 +40,48 @@ Mapa::Mapa(std::string ruta){
        throw std::runtime_error("No se pudo abrir el mapa");
    }
 }
-
 Mapa::~Mapa(){
-    delete[] this->mapa;
+}
+std::string Mapa::verificarVecinos(const size_t &i){
+    bool norte = false;
+    bool sur = false;
+    bool este = false;
+    bool oeste = false;
+    if (i >= columnas)
+    { //norte
+        vecinos += mapa[i - columnas];
+        norte = true;
+    }
+    if (i <= area-columnas)
+    { //sur
+        vecinos += mapa[i + columnas];
+        sur = true;
+    }
+    if ((i + 1) % columnas != 0)
+    { //este
+        vecinos += mapa[i + 1];
+        este = true;
+    }
+    if ((i) % columnas  != 0)
+    { //oeste
+       vecinos += mapa[i - 1];
+        oeste = true;
+    }
+    if (norte && este)
+    { //NorEste
+        vecinos += mapa[i - columnas + 1];
+    }
+    if (norte && oeste)
+    { //Noroeste
+        vecinos += mapa[i - columnas - 1];
+    }                                               
+    if (sur && este )                              
+    { //Sureste                                     
+        vecinos += mapa[i + columnas + 1];        
+    }
+    if (sur && oeste )
+    { //Suroeste
+        vecinos += mapa[i + columnas - 1];
+    }
+    return vecinos;
 }
