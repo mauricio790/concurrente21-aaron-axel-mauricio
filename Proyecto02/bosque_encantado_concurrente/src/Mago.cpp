@@ -2,7 +2,7 @@
 #include "Hechizo.hpp"
 #include<iostream>
 #include<fstream>
-
+#include<stdexcept>
 
 int Mago::start(int argc,char* argv[]){
     int error = 0;
