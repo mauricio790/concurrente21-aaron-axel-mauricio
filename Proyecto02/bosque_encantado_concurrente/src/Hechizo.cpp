@@ -1,4 +1,5 @@
 #include "Hechizo.hpp"
+#include<stdexcept>
 #include <omp.h>
 
 Hechizo::Hechizo()
