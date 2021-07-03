@@ -51,7 +51,7 @@ std::string Mapa::obtenerVecinos(const size_t &i){
         vecinos += mapa[i - columnas];
         norte = true;
     }
-    if (i <= area-columnas)
+    if (i < area-columnas)
     { //sur
         vecinos += mapa[i + columnas];
         sur = true;
