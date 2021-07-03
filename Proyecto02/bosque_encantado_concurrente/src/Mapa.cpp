@@ -2,6 +2,7 @@
 
 #include<iostream>
 #include<cstring>
+#include<stdexcept>
 
 Mapa::Mapa(std::string ruta){
    std::ifstream mapa_archivo;

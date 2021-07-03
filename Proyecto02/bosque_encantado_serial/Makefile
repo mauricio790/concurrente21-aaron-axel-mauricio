@@ -1,5 +1,5 @@
 CXX=g++
-FLAGS=$(strip -Wall -Wextra -std=gnu++2a $(DEFS))
+FLAGS=$(strip -Wall -Wextra -std=gnu++11 $(DEFS))
 LIBS=-pthread
 LINTFILTERS=$\
 	-build/c++11,$\
