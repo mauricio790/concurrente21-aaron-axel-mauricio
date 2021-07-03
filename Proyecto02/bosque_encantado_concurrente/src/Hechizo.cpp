@@ -1,4 +1,5 @@
 #include "Hechizo.hpp"
+#include <omp.h>
 
 Hechizo::Hechizo()
 {
@@ -55,12 +56,17 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches)
     }
     std::string nuevoMapa;
     escribirMapa(mapa, 0);
+    int thread_count = 2;
+
+    #pragma omp parallel num_threads(thread_count) default(none) \
+    shared(mapa) shared(nuevoMapa) shared(noches)
     for(size_t noche = 0; noche <noches; ++noche){
         nuevoMapa = mapa.mapa;
+        #pragma omp for
         for(size_t celda = 0; celda < mapa.area;++celda){
             std::string vecinos = mapa.obtenerVecinos(celda);
             nuevoMapa[celda] = this->verificarVecinos(mapa,vecinos,celda);
-        }  
+        }
         mapa.mapa = nuevoMapa;
         this->escribirMapa(mapa,noche+1);
         
