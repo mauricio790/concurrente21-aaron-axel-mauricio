@@ -56,10 +56,10 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches)
     std::string nuevoMapa;
     escribirMapa(mapa, 0);
     for(size_t noche = 0; noche <noches; ++noche){
-        nuevoMapa = "";
+        nuevoMapa = mapa.mapa;
         for(size_t celda = 0; celda < mapa.area;++celda){
             std::string vecinos = mapa.obtenerVecinos(celda);
-            nuevoMapa += this->verificarVecinos(mapa,vecinos,celda);
+            nuevoMapa[celda] = this->verificarVecinos(mapa,vecinos,celda);
         }  
         mapa.mapa = nuevoMapa;
         this->escribirMapa(mapa,noche+1);
@@ -90,7 +90,7 @@ void Hechizo::escribirMapa(Mapa &mapa, size_t noche)
     this->salida << std::endl;
 }
 
-std::string Hechizo::verificarVecinos(Mapa& mapa,std::string prueba, size_t i)
+char Hechizo::verificarVecinos(Mapa& mapa,std::string prueba, size_t i)
 {
     size_t cant_arboles = 0;
     size_t cant_lagos = 0;
@@ -108,34 +108,25 @@ std::string Hechizo::verificarVecinos(Mapa& mapa,std::string prueba, size_t i)
     return verificarReglas(mapa,i, cant_arboles, cant_lagos);
 }
 
-std::string Hechizo::verificarReglas(Mapa& mapa,const size_t &i, size_t cant_arboles, size_t cant_lagos)
+char Hechizo::verificarReglas(Mapa& mapa,const size_t &i, size_t cant_arboles, size_t cant_lagos)
 {
-    std::string bosque = "";
-    bool cumple_regla = false;
+    char bosque = mapa.mapa[i];
     //if(i<area){
     if (mapa.mapa[i] == ARBOL && cant_lagos >= 4)
     { //Inundacion       
-        bosque += "l";
-        cumple_regla = true;
+        bosque = 'l';
     }
     if (mapa.mapa[i] == LAGO && cant_lagos < 3)
     { //Sequia
-        bosque += "-";
-        cumple_regla = true;
+        bosque = '-';
     }
     if (mapa.mapa[i] == PRADERA && cant_arboles >= 3)
     { //Reforestacion
-        bosque += "a";
-        cumple_regla = true;
+        bosque = 'a';
     }
     if (mapa.mapa[i] == ARBOL && cant_arboles > 4)
     { // Hacinamiento
-        bosque += "-";
-        cumple_regla = true;
-    }
-    if (!cumple_regla)
-    {
-        bosque += mapa.mapa[i];
+        bosque += '-';
     }
 
     return bosque;
