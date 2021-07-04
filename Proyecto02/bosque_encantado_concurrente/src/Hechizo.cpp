@@ -133,7 +133,7 @@ char Hechizo::verificarReglas(Mapa& mapa,const size_t &i, size_t cant_arboles, s
     }
     if (mapa.mapa[i] == ARBOL && cant_arboles > 4)
     { // Hacinamiento
-        bosque += '-';
+        bosque = '-';
     }
 
     return bosque;
