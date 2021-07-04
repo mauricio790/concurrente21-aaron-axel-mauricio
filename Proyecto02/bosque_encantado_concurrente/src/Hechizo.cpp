@@ -57,7 +57,7 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches)
     }
     std::string nuevoMapa;
     escribirMapa(mapa, 0);
-    int thread_count = 2;
+    int thread_count = 8;
 
     for(size_t noche = 0; noche <noches; ++noche){
         nuevoMapa = mapa.mapa;
