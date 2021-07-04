@@ -57,17 +57,16 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches)
     }
     std::string nuevoMapa;
     escribirMapa(mapa, 0);
-    int thread_count = 8;
-
+    int thread_count = omp_get_max_threads();
     for(size_t noche = 0; noche <noches; ++noche){
         nuevoMapa = mapa.mapa;
         //omp_set_num_threads(thread_count);
         #pragma omp parallel num_threads(thread_count) default(none) shared(mapa,nuevoMapa)
-        #pragma omp for schedule(static)
-        for(size_t celda = 0; celda < mapa.area;++celda){
-            std::string vecinos = mapa.obtenerVecinos(celda);
-            nuevoMapa[celda] = this->verificarVecinos(mapa,vecinos,celda);
-        }
+            #pragma omp for schedule(static)
+            for(size_t celda = 0; celda < mapa.area;++celda){
+                std::string vecinos = mapa.obtenerVecinos(celda);
+                nuevoMapa[celda] = this->verificarVecinos(mapa,vecinos,celda);
+            }
         mapa.mapa = nuevoMapa;
         this->escribirMapa(mapa,noche+1);
         

@@ -44,15 +44,13 @@ Mapa::~Mapa(){
 std::string Mapa::obtenerVecinos(const size_t &i){
     bool norte = false;
     bool sur = false;
-    bool este = false;
-    bool oeste = false;
     std::string vecinos = "";
     if (i >= columnas)
     { //norte
         vecinos += mapa[i - columnas];
         norte = true;
     }
-    if (i < area-columnas)
+    if (i < area - columnas)
     { //sur
         vecinos += mapa[i + columnas];
         sur = true;
@@ -60,28 +58,27 @@ std::string Mapa::obtenerVecinos(const size_t &i){
     if ((i + 1) % columnas != 0)
     { //este
         vecinos += mapa[i + 1];
-        este = true;
+        if (norte)
+        { //NorEste
+            vecinos += mapa[i - columnas + 1];
+        }
+        if (sur)
+        { //Sureste
+            vecinos += mapa[i + columnas + 1];
+        }
     }
-    if ((i) % columnas  != 0)
+    if ((i) % columnas != 0)
     { //oeste
-       vecinos += mapa[i - 1];
-        oeste = true;
+        vecinos += mapa[i - 1];
+        if (norte)
+        { //Noroeste
+            vecinos += mapa[i - columnas - 1];
+        }
+        if (sur)
+        { //Suroeste
+            vecinos += mapa[i + columnas - 1];
+        }
     }
-    if (norte && este)
-    { //NorEste
-        vecinos += mapa[i - columnas + 1];
-    }
-    if (norte && oeste)
-    { //Noroeste
-        vecinos += mapa[i - columnas - 1];
-    }                                               
-    if (sur && este )                              
-    { //Sureste                                     
-        vecinos += mapa[i + columnas + 1];        
-    }
-    if (sur && oeste )
-    { //Suroeste
-        vecinos += mapa[i + columnas - 1];
-    }
+
     return vecinos;
 }
