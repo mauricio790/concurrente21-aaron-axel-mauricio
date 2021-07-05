@@ -48,8 +48,8 @@ void Hechizo::hechizar(std::string order)
 void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches)
 {
     size_t noches;
-    bool imprimirHechizos = medias_noches < 0;
-    if(imprimirHechizos){
+    bool imprimirHechizos = medias_noches > 0;
+    if(!imprimirHechizos){
         noches = medias_noches * -1;
     }else{
         noches = medias_noches;
@@ -63,7 +63,14 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches)
             nuevoMapa[celda] = this->verificarVecinos(mapa,vecinos,celda);
         }  
         mapa.mapa = nuevoMapa;
-        this->escribirMapa(mapa,noche+1);
+        if (!imprimirHechizos){
+            if (noche == noches-1){
+                this->escribirMapa(mapa,noche+1);
+            }
+        }
+        else{
+            this->escribirMapa(mapa,noche+1);
+        }
         
     }
     

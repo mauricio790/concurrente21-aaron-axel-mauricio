@@ -3,7 +3,12 @@
 #include<iostream>
 #include<cstring>
 #include<stdexcept>
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */ 
 Mapa::Mapa(std::string ruta){
    std::ifstream mapa_archivo;
    mapa_archivo.open(ruta);
@@ -41,6 +46,12 @@ Mapa::Mapa(std::string ruta){
 }
 Mapa::~Mapa(){
 }
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */ 
 std::string Mapa::obtenerVecinos(const size_t &i){
     bool norte = false;
     bool sur = false;

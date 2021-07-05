@@ -9,7 +9,12 @@ Hechizo::Hechizo()
 Hechizo::~Hechizo()
 {
 }
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */ 
 void Hechizo::hechizar(std::string order)
 {
     std::string ruta;
@@ -45,12 +50,17 @@ void Hechizo::hechizar(std::string order)
 
     salida.close();
 }
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */ 
 void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches)
 {
     size_t noches;
-    bool imprimirHechizos = medias_noches < 0;
-    if(imprimirHechizos){
+    bool imprimirHechizos = medias_noches > 0;
+    if(!imprimirHechizos){
         noches = medias_noches * -1;
     }else{
         noches = medias_noches;
@@ -68,12 +78,24 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches)
                 nuevoMapa[celda] = this->verificarVecinos(mapa,vecinos,celda);
             }
         mapa.mapa = nuevoMapa;
-        this->escribirMapa(mapa,noche+1);
+        if (!imprimirHechizos){
+            if (noche == noches-1){
+                this->escribirMapa(mapa,noche+1);
+            }
+        }
+        else{
+            this->escribirMapa(mapa,noche+1);
+        }
         
     }
     
 }
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */ 
 void Hechizo::escribirMapa(Mapa &mapa, size_t noche)
 {
     this->salida << noche << ":" << std::endl;
@@ -95,7 +117,12 @@ void Hechizo::escribirMapa(Mapa &mapa, size_t noche)
     }
     this->salida << std::endl;
 }
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */ 
 char Hechizo::verificarVecinos(Mapa& mapa,std::string prueba, size_t i)
 {
     size_t cant_arboles = 0;
@@ -113,7 +140,12 @@ char Hechizo::verificarVecinos(Mapa& mapa,std::string prueba, size_t i)
     }
     return verificarReglas(mapa,i, cant_arboles, cant_lagos);
 }
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */ 
 char Hechizo::verificarReglas(Mapa& mapa,const size_t &i, size_t cant_arboles, size_t cant_lagos)
 {
     char bosque = mapa.mapa[i];
