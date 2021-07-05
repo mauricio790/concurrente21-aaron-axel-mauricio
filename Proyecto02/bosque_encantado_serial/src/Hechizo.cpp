@@ -1,5 +1,6 @@
 #include "Hechizo.hpp"
-#include<stdexcept>
+#include <stdexcept>
+
 
 Hechizo::Hechizo()
 {
@@ -8,7 +9,12 @@ Hechizo::Hechizo()
 Hechizo::~Hechizo()
 {
 }
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */
 void Hechizo::hechizar(std::string order)
 {
     std::string ruta;
@@ -25,60 +31,66 @@ void Hechizo::hechizar(std::string order)
     }
 
     //Crear archivo de salida y hechizar el mapa Hechizar(mapa)
-    Mapa mapa(ruta);
+    Mapa mapa("input/" + ruta);
     std::string extention = ".txt";
-    std::string rutaSalida = ruta.substr(0, ruta.length() - extention.length()) + "-";
-    rutaSalida += std::to_string(medias_noches < 0 ? medias_noches * -1 : medias_noches) + extention;
-    //std::cout << rutaSalida << std::endl;
+    mapa.rutaSalida = "output/" + ruta.substr(0, ruta.length() - extention.length()) + "-";
 
-    this->salida.open(rutaSalida);
-
-    if (salida.is_open())
-    {
-        this->hechizarMapa(mapa, medias_noches);
-    }
-    else
-    {
-        throw std::runtime_error("No se pudo abrir archivo de salida");
-    }
-
-    salida.close();
+    this->hechizarMapa(mapa, medias_noches);
+  
 }
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */
 void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches)
 {
     size_t noches;
     bool imprimirHechizos = medias_noches > 0;
-    if(!imprimirHechizos){
+    if (!imprimirHechizos)
+    {
         noches = medias_noches * -1;
-    }else{
+    }
+    else
+    {
         noches = medias_noches;
     }
     std::string nuevoMapa;
-    escribirMapa(mapa, 0);
-    for(size_t noche = 0; noche <noches; ++noche){
+
+    for (size_t noche = 0; noche < noches; ++noche)
+    {
         nuevoMapa = mapa.mapa;
-        for(size_t celda = 0; celda < mapa.area;++celda){
+        for (size_t celda = 0; celda < mapa.area; ++celda)
+        {
             std::string vecinos = mapa.obtenerVecinos(celda);
-            nuevoMapa[celda] = this->verificarVecinos(mapa,vecinos,celda);
-        }  
+            nuevoMapa[celda] = this->verificarVecinos(mapa, vecinos, celda);
+        }
+
         mapa.mapa = nuevoMapa;
-        if (!imprimirHechizos){
-            if (noche == noches-1){
-                this->escribirMapa(mapa,noche+1);
+        if (!imprimirHechizos)
+        {
+            if (noche == noches - 1)
+            {
+                this->escribirMapa(mapa, noche + 1);
             }
         }
-        else{
-            this->escribirMapa(mapa,noche+1);
+        else
+        {
+            this->escribirMapa(mapa, noche + 1);
         }
-        
     }
-    
 }
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */
 void Hechizo::escribirMapa(Mapa &mapa, size_t noche)
 {
-    this->salida << noche << ":" << std::endl;
+    this->salida.open(mapa.rutaSalida + std::to_string(noche) + ".txt");
+    // << noche << ":" << std::endl;
     std::string linea = "";
     for (size_t i = 0; i < mapa.area; i++)
     {
@@ -96,9 +108,15 @@ void Hechizo::escribirMapa(Mapa &mapa, size_t noche)
         }
     }
     this->salida << std::endl;
+    this->salida.close();
 }
-
-char Hechizo::verificarVecinos(Mapa& mapa,std::string prueba, size_t i)
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */
+char Hechizo::verificarVecinos(Mapa &mapa, std::string prueba, size_t i)
 {
     size_t cant_arboles = 0;
     size_t cant_lagos = 0;
@@ -113,15 +131,20 @@ char Hechizo::verificarVecinos(Mapa& mapa,std::string prueba, size_t i)
             cant_lagos++;
         }
     }
-    return verificarReglas(mapa,i, cant_arboles, cant_lagos);
+    return verificarReglas(mapa, i, cant_arboles, cant_lagos);
 }
-
-char Hechizo::verificarReglas(Mapa& mapa,const size_t &i, size_t cant_arboles, size_t cant_lagos)
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */
+char Hechizo::verificarReglas(Mapa &mapa, const size_t &i, size_t cant_arboles, size_t cant_lagos)
 {
     char bosque = mapa.mapa[i];
     //if(i<area){
     if (mapa.mapa[i] == ARBOL && cant_lagos >= 4)
-    { //Inundacion       
+    { //Inundacion
         bosque = 'l';
     }
     if (mapa.mapa[i] == LAGO && cant_lagos < 3)

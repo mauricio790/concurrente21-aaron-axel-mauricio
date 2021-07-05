@@ -13,6 +13,7 @@ class Mapa{
         size_t columnas;
         size_t area;
         std::string mapa;
+        std::string rutaSalida;
         std::string obtenerVecinos(const size_t &i);
 };
 

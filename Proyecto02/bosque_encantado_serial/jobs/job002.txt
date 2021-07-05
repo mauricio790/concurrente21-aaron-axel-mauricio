@@ -1,3 +1,0 @@
-jobs/map101.txt -50
-jobs/map103.txt -40
-jobs/map105.txt -25

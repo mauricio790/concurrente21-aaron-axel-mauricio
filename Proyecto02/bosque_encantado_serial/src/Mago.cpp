@@ -3,8 +3,12 @@
 #include<iostream>
 #include<fstream>
 #include<stdexcept>
-
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */ 
 int Mago::start(int argc,char* argv[]){
     int error = 0;
     std::string linea;
@@ -51,7 +55,12 @@ Mago::Mago(){
 
 Mago::~Mago(){
 }
-
+/**
+ * @brief 
+ * @details  
+ * @param 
+ * @return 
+ * */ 
 int Mago::analyze_arguments(int argc, char* argv[]){
 
     if(argc == 2){
