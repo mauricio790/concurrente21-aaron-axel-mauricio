@@ -9,6 +9,6 @@
  * */ 
 int main(int argc, char* argv[]) {
   Mago mago;
-  return mago.start(argc,argv);
+  return mago.start(argc, argv);
 }
 
