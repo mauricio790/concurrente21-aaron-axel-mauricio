@@ -10,3 +10,26 @@
 Diseño Preeliminar para programa serial
 
 ![Diseño](desing/Diseno_BosqueEncantado.svg "Diagrama Diseño Serial")
+
+#### Tiempo Ejecución Programa Serial
+Usando la orden de trabajo `job002.txt` modificada de la siguiente manera:
+~~~
+map101.txt -50
+map103.txt -40
+map105.txt -25`
+~~~
+El programa serial tuvo un rendimiento de 3 minutos 9 segundos aproximadamente.
+
+#### Profiling
+Mediante uso de la herramienta Callgrind de valgrind, se identifican las regiones de código impactan el consumo de CPU.
+Se identifica que, además de las impresiones, los métodos de `obtenerVecinos`, `verificarVecinos` y `verificarReglas`son llamados múltiples veces debido a un ciclo que trabaja en todas las casillas del mapa.
+
+![Cachegrind](img/cachegrind_serial.jpg "Cachegrind")
+
+Observando el comportamiento del código, se analizó el implementar que cada hilo se encargue de extraer y trabajar cada mapa separado, pero se optó por granular más la solución y que todos los hilos trabajen en un mapa a la vez.
+#### Diseño Concurrente
+
+El diseño propuesto es el siguiente:
+![Petri](img/petri_desing.jpg "Diseño Petri")
+
+#### Rendimiento respecto a la versión serial
