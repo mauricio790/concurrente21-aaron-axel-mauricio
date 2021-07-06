@@ -33,3 +33,11 @@ El diseño propuesto es el siguiente:
 ![Petri](img/petri_desing.jpg "Diseño Petri")
 
 #### Rendimiento respecto a la versión serial
+
+Luego de la implementación haciendo uso de OMP, se corrió nuevamente el caso de prueba previamente mencionado. El test concurrente se realizó en una máquina local de 4 núcleos (y 4 hilos) y se tomó el promedio de 3 tiempos para realizar el análisis.
+
+![Tabla](img/tabla_serial_concurrente.jpg "Tabla Comparacion")
+
+![Grafico](img/grafico_serial_concurrente.jpg "Grafico Comparacion")
+
+Realizando los cambios y con este caso de prueba, se obtuvo un speedup considerable respecto a la versión serial. En casos de pruebas más pequeños tal como `job001.txt`, la versión concurrente puede ser un poco menos eficiente.
