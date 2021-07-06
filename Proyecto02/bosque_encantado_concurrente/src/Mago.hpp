@@ -13,6 +13,8 @@ class Mago{
   std::vector<std::string> get_mapas();
  private:
   std::string job_order;
+  int num_threads;
+
 };
 
 #endif

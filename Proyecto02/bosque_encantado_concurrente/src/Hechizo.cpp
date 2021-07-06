@@ -3,8 +3,14 @@
 #include <omp.h>
 /**
  * @brief Constructor de Hechizo
+ * @param num_of_threads cantidad de hilos
  * */ 
-Hechizo::Hechizo() {
+Hechizo::Hechizo(int num_of_threads) {
+  if(num_of_threads == 0) {
+    this->num_threads = omp_get_max_threads();
+  } else {
+    this->num_threads = num_of_threads;
+  }
 }
 /**
  * @brief Destructor de Hechizo
@@ -29,11 +35,15 @@ void Hechizo::hechizar(std::string order) {
   }
 
   // Crear archivo de salida y hechizar el mapa Hechizar(mapa)
-  Mapa mapa("input/" + ruta);
-  std::string extention = ".txt";
-  mapa.rutaSalida = "output/" +
-  ruta.substr(0, ruta.length() - extention.length()) + "-";
+  try{
+    Mapa mapa("input/" + ruta);
+    std::string extention = ".txt";
+    mapa.rutaSalida = "output/" +
+    ruta.substr(0, ruta.length() - extention.length()) + "-";
     this->hechizarMapa(mapa, medias_noches);
+  } catch(const std::runtime_error& error){
+    std::cout << error.what() << std::endl;
+  };
 }
 /**
  * @brief Se encarga de realizar todos los cambios necesarios al mapa durante todas las medias noches
@@ -51,10 +61,9 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches) {
       noches = medias_noches;
   }
   std::string nuevoMapa;
-  int thread_count = omp_get_max_threads();
   for (size_t noche = 0; noche < noches; ++noche) {
         nuevoMapa = mapa.mapa;
-#pragma omp parallel num_threads(thread_count) default(none) shared(mapa, nuevoMapa)
+#pragma omp parallel num_threads(this->num_threads) default(none) shared(mapa, nuevoMapa)
 #pragma omp for schedule(static)
     for (size_t celda = 0; celda < mapa.area; ++celda) {
       std::string vecinos = mapa.obtenerVecinos(celda);

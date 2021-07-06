@@ -11,9 +11,11 @@
 #define PRADERA '-'
 
 class Hechizo{
+ private:
+  int num_threads;
  public:
   std::ofstream salida;
-  Hechizo();
+  Hechizo(int num_of_threads);
   ~Hechizo();
   // crea un mapa y se deja la cantidad de medias noches
   void hechizar(std::string mapa);
@@ -23,7 +25,7 @@ class Hechizo{
   char verificarVecinos(Mapa& mapa, std::string prueba, size_t i);
  private:
   void escribirMapa(Mapa& mapa, size_t noche);
- protected:
+  
 };
 
 #endif
