@@ -2,10 +2,10 @@
 // Serial web server's initial code for parallelization
 #include "Mago.hpp"
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
+ * @brief Hace un llamado a Mago para iniciar el programa
+ * @param argc cantidad de argumentos
+ * @param argv argumentos
+ * @return codigo de error, si es 0 finaliza exitosamente
  * */ 
 int main(int argc, char* argv[]) {
   Mago mago;

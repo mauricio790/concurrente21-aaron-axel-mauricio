@@ -4,11 +4,10 @@
 #include<cstring>
 #include<stdexcept>
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
- * */ 
+ * @brief Constructor de mapa
+ * @details Abre y extrae la informacion y los valores del archivo mapa
+ * @param ruta La ruta donde se encuentra el mapa 
+ * */
 Mapa::Mapa(std::string ruta) {
   std::ifstream mapa_archivo;
   mapa_archivo.open(ruta);
@@ -41,13 +40,15 @@ Mapa::Mapa(std::string ruta) {
     throw std::runtime_error("No se pudo abrir el mapa");
     }
 }
+/**
+ * @brief Destructor de Mapa
+ * */
 Mapa::~Mapa() {
 }
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
+ * @brief Extrae todos los vecinos de una celda dada
+ * @param i indice de la posicion de la celda
+ * @return todos los vecinos de la posicion solicitada en un string
  * */ 
 std::string Mapa::obtenerVecinos(const size_t &i) {
     bool norte = false;

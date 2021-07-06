@@ -4,10 +4,10 @@
 #include<fstream>
 #include<stdexcept>
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
+ * @brief Inicia el programa y verifica argumentos
+ * @param argc cantidad de argumentos en la entrada
+ * @param argv argumentos
+ * @return codigo de error
  * */ 
 int Mago::start(int argc, char* argv[]) {
   int error = 0;
@@ -44,15 +44,21 @@ std::vector<std::string> Mago::get_mapas() {
     }
   return mapas;
 }
+/**
+ * @brief Constructor de Mago
+ * */ 
 Mago::Mago() {
 }
+/**
+ * @brief Destructor de Mago
+ * */ 
 Mago::~Mago() {
 }
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
+ * @brief analiza los argumentos ingresados como parametro
+ * @param argc cantidad de argumentos en la entrada
+ * @param argv argumentos
+ * @return codigo de error
  * */ 
 int Mago::analyze_arguments(int argc, char* argv[]) {
   if (argc == 2) {

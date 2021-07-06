@@ -1,17 +1,21 @@
 #include "Hechizo.hpp"
 #include <stdexcept>
 #include <omp.h>
-
+/**
+ * @brief Constructor de Hechizo
+ * */ 
 Hechizo::Hechizo() {
 }
-
+/**
+ * @brief Destructor de Hechizo
+ * */ 
 Hechizo::~Hechizo() {
 }
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
+ * @brief Recibe una orden de trabajo y si puede extraer todos los datos del mapa
+ * manda a realizar los cambios al mapa de ser necesario
+ * @param order orden de trabajo
+ * @return void
  * */
 void Hechizo::hechizar(std::string order) {
   std::string ruta;
@@ -32,10 +36,11 @@ void Hechizo::hechizar(std::string order) {
     this->hechizarMapa(mapa, medias_noches);
 }
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
+ * @brief Se encarga de realizar todos los cambios necesarios al mapa durante todas las medias noches
+ * @details Metodo concurrente, uso de OMP para paralelizar el trabajo
+ * @param mapa Mapa inicial del que se partirá para realizar los cambios
+ * @param medias_noches cantidad de noches que se verificará para el Mago
+ * @return void
  * */
 void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches) {
   size_t noches;
@@ -66,14 +71,13 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches) {
   }
 }
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
+ * @brief Crea un nuevo mapa de ser necesario en un archivo .txt
+ * @param mapa Mapa inicial del que se partirá para realizar los cambios
+ * @param medias_noches cantidad de noches que se verificará para el Mago
+ * @return void
  * */
 void Hechizo::escribirMapa(Mapa &mapa, size_t noche) {
   this->salida.open(mapa.rutaSalida + std::to_string(noche) + ".txt");
-  // << noche << ":" << std::endl;
   std::string linea = "";
   for (size_t i = 0; i < mapa.area; i++) {
     linea += mapa.mapa[i];
@@ -90,10 +94,11 @@ void Hechizo::escribirMapa(Mapa &mapa, size_t noche) {
   this->salida.close();
 }
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
+ * @brief Verifica cuantos vecinos de cierta clase tiene un caracter en el mapa
+ * @param mapa Mapa inicial del que se partirá para realizar los cambios
+ * @param prueba string de los vecinos del caracter a verificar
+ * @param i indice del caracter a verificar
+ * @return caracter modificado
  * */
 char Hechizo::verificarVecinos(Mapa &mapa, std::string prueba, size_t i) {
   size_t cant_arboles = 0;
@@ -109,10 +114,12 @@ char Hechizo::verificarVecinos(Mapa &mapa, std::string prueba, size_t i) {
   return verificarReglas(mapa, i, cant_arboles, cant_lagos);
 }
 /**
- * @brief 
- * @details  
- * @param 
- * @return 
+ * @brief Verifica las reglas del Mago, si alguna se cumple, el caracter se modifica
+ * @param mapa Mapa inicial del que se partirá para realizar los cambios
+ * @param i indice del caracter a verificar
+ * @param cant_arboles cantidad de arboles vecinos al caracter a verificar
+ * @param cant_lagos cantidad de lagos vecinos al caracter a verificar
+ * @return caracter modificado
  * */
 char Hechizo::verificarReglas(Mapa &mapa, const size_t &i,
 size_t cant_arboles, size_t cant_lagos) {
