@@ -26,7 +26,7 @@ void GoldbachCalculator::leerDatos(int64_t number) {
     //sums_goldbach << number << ": ";
   /* After traversing the vector, it is invoked
    * to the method that forms the string of sums */
-  sums_goldbach = generadorHtml.generarHtml(sumGoldbach,cant_sumGoldbach[0],number);
+  sums_goldbach = generadorHtml.generarHtml(&sumGoldbach,cant_sumGoldbach[0],number);
 }
 /**
  * @brief This method verifies that the number entered has a solution 
@@ -187,7 +187,7 @@ void GoldbachCalculator::conDebil(int64_t numero, bool esNegativo) {
     ++it_cantsums;
     ++it_nums;
   }*/
-}
+//}
 /**
  * @brief Verifies if the given number is an even number
  * @details this method receives a number and checks if it's an even number. 

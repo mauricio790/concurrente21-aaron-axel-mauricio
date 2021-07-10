@@ -10,7 +10,7 @@ class GeneradorHtml{
  public:
  GeneradorHtml();
  ~GeneradorHtml();
-  std::stringstream generarHtml(std::vector<GoldbachCalculator::Sumas> sumGoldbach, int cantidad,int64_t number);
+  std::stringstream generarHtml(std::vector<GoldbachCalculator::Sumas>* sumGoldbach, int cantidad,int64_t number);
 };
 
 #endif  // GENERADORHTML_H
