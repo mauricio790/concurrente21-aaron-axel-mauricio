@@ -122,7 +122,7 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers) {
   (void)httpRequest;
   GoldbachCalculator goldbach_calc;
-  goldbach_calc.leerDatos(user_numbers);
+  goldbach_calc.leerDatos(-8319); //Se tienen que mandar solo el numero 
   std::string sums = goldbach_calc.sums_goldbach.str();
 
   setHeaders(httpResponse, 0);

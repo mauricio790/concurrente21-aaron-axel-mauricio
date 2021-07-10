@@ -8,6 +8,7 @@
 #include <sstream>
 #include <math.h>
 #include "GoldbachCalculator.hpp"
+#include "GeneradorHtml.hpp"
 
 GoldbachCalculator::GoldbachCalculator() {
 }
@@ -19,18 +20,14 @@ GoldbachCalculator::~GoldbachCalculator() {
  *  then sends them to start solving the goldbach sums. 
  * @param std::vector<int64_t>* user_numbers user entered numbers to solve 
  * */
-void GoldbachCalculator::leerDatos(std::vector<int64_t>* user_numbers) {
-  // Cycle that runs through the vector of numbers to be processed
-  for (std::vector<int64_t>::iterator it = user_numbers->begin();
-it != user_numbers->end() ; it++) {
-    goldbach(*it);
-  }
+void GoldbachCalculator::leerDatos(int64_t number) {
+  GeneradorHtml generadorHtml;
+    goldbach(number);
+    //sums_goldbach << number << ": ";
   /* After traversing the vector, it is invoked
    * to the method that forms the string of sums */
-  formarString(user_numbers);
-  std::string sums = sums_goldbach.str();
+  sums_goldbach = generadorHtml.generarHtml(sumGoldbach,cant_sumGoldbach[0],number);
 }
-
 /**
  * @brief This method verifies that the number entered has a solution 
  * @details Verifies that the number entered has a solution. If it's lower than 0, raises a flag so the program 
@@ -61,10 +58,12 @@ void GoldbachCalculator::goldbach(int64_t dato) {
  * */
 void GoldbachCalculator::conFuerte(int64_t numero, bool esNegativo) {
   int cantidad = 0;
+  cantSumas = 0;
   for (int64_t num_1 = 2; (num_1 * 2) <= numero; num_1+=2) {
     if (esPrimo(num_1) && esPrimo(numero - num_1)) {
       if (num_1 <= numero - num_1) {
         cantidad++;
+        cantSumas++;
         /*Check if this number activates the boolean of
          * if it is negative to save the sums.*/
         if (esNegativo) {
@@ -132,17 +131,28 @@ void GoldbachCalculator::conDebil(int64_t numero, bool esNegativo) {
  * @details this method creats a string with the final result for the user.
  * @param user_numbers std::vector with all the numbers given by the user
  * */
-void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers) {
-  std::vector<int64_t>::iterator it_nums = user_numbers->begin();
+/*void GoldbachCalculator::formarString(int64_t number, int cantidad) {
+  cantidad = cant_sumGoldbach[0];
+  sums_goldbach << cantidad << " sums <br>";
+  if (number < 0) {
+    for (int index =0; index < cantidad; index++) {
+      if (sumGoldbach[index].num3 == 0){
+        sums_goldbach << index +1 << ". " << sumGoldbach[index].num1 << " + " << sumGoldbach[index].num2 << "<br>";
+      } else {
+        sums_goldbach << index +1 << ". " << sumGoldbach[index].num1 << " + " << sumGoldbach[index].num2 << " + "<< sumGoldbach[index].num3 <<"<br>";
+      }
+    }
+  }*/
+  /*std::vector<int64_t>::iterator it_nums = user_numbers->begin();
   std::vector<int>::iterator it_cantsums = cant_sumGoldbach.begin();
   int index_sumas = 0;
   int maximo_index = 0;
   /* Cycle that will iterate through the vector that
-   * stores the amount of sums of the numbers*/
+   * stores the amount of sums of the numbers
   while (it_cantsums != cant_sumGoldbach.end()) {
     int cant_sumas = *it_cantsums;
     /* Check if the number to be stored in
-     * the string complies with the restrictions*/
+     * the string complies with the restrictions
     if (*it_nums >= -5 && *it_nums <= 5) {
       sums_goldbach << "<B><FONT COLOR=red><h2>"
       << *it_nums <<"</h2></FONT></B>";
@@ -154,17 +164,17 @@ void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers) {
         sums_goldbach << cant_sumas << " sums <br>";
       }
     /* Check if the number is negative to see if it is \
-     * saved their sums and should be stored in the string */
+     * saved their sums and should be stored in the string 
     if (*it_nums < 0) {
       maximo_index = *it_cantsums + maximo_index;
       int contador_sumas = 1;
       /* Cycle that will iterate through the vector of structures where
-       * the sums are found to be stored in the strings */
+       * the sums are found to be stored in the strings 
       while (index_sumas < maximo_index) {
        sums_goldbach << contador_sumas << ". " << sumGoldbach[index_sumas].num1
        << " + " << sumGoldbach[index_sumas].num2;
        /* Check if the structure has a third 
-        * number to add to the string*/
+        * number to add to the string
         if (sumGoldbach[index_sumas].num3 != 0) {
           sums_goldbach << " + " << sumGoldbach[index_sumas].num3;
         }
@@ -176,7 +186,7 @@ void GoldbachCalculator::formarString(std::vector<int64_t>* user_numbers) {
     }
     ++it_cantsums;
     ++it_nums;
-  }
+  }*/
 }
 /**
  * @brief Verifies if the given number is an even number
