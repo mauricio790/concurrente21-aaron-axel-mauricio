@@ -7,7 +7,8 @@
 class Task{
     public:
         Task();
-        Task(HttpRequest* request, HttpResponse* response, size_t number, size_t index, size_t numberToProcess, size_t *numbersProcessed);
+        Task(HttpRequest* request, HttpResponse* response, int64_t number, size_t index,
+          size_t numberToProcess, size_t *numbersProcessed, std::vector<std::string>* result);
         Task(const Task& other);
         ~Task();
 
@@ -18,7 +19,7 @@ class Task{
         HttpResponse* response; 
 
         size_t index;
-        size_t number;
+        int64_t number;
         size_t numbersToProcess;
         size_t *numbersProcessed;   
 

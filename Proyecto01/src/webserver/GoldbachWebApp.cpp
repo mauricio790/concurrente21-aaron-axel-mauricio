@@ -4,6 +4,7 @@
 #include <vector>
 #include "GoldbachWebApp.hpp"
 #include "GoldbachCalculator.hpp"
+#include "Task.hpp"
 
 GoldbachWebApp::GoldbachWebApp() {
 }
@@ -45,6 +46,7 @@ HttpResponse& httpResponse) {
         return this->serveNotFound(httpRequest, httpResponse);
       }
       numbers_in_URL = num_matches.suffix().str();
+
     }
     return this->serveGoldbachSums(httpRequest, httpResponse, &user_numbers);
   }
@@ -121,10 +123,42 @@ bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest
 bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers) {
   (void)httpRequest;
-  GoldbachCalculator goldbach_calc;
-  goldbach_calc.leerDatos(-8319); //Se tienen que mandar solo el numero 
-  std::string sums = goldbach_calc.sums_goldbach.str();
+  size_t user_number_counter = (*user_numbers).size();
+  size_t numbers_Processed = 1;
+  std::vector<std::string> result;
+  result.resize(user_number_counter);
 
+  for(size_t index = 0; index < user_number_counter; index++){
+    
+    Task task(&httpRequest, &httpResponse ,(*user_numbers)[index],
+      index,(size_t)user_number_counter, &numbers_Processed, &result);
+
+    WebServer::getInstance().tasks_queue.push(task);
+  
+  }/*
+  while(true){
+    std::cout << "que esta psandooo" <<std::endl;
+    Task task_result = WebServer::getInstance().producedTasks_queue.pop();
+    if (*(task_result.request) == httpRequest) {
+      setHeaders(httpResponse, 0);
+    // Build the body of the response
+    std::string title = "Goldbach sums for ";  // + std::to_string(number);
+    httpResponse.body() << "<!DOCTYPE html>\n"
+      << "<html lang=\"en\">\n"
+      << "  <meta charset=\"ascii\"/>\n"
+      << "  <title>" << title << "</title>\n"
+      << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
+      << "  <h1>" << title << "</h1>\n";
+      for(size_t index = 0; index < (*task_result.resultSums).size(); index++){
+        httpResponse.body() << "<p>" << (*task_result.resultSums).at(task_result.index) << "</p>\n";
+      }
+      break;
+    } else {
+      WebServer::getInstance().tasks_queue.push(task_result);
+    }
+  }*/
+  //delete numbers_Processed;
+  /*
   setHeaders(httpResponse, 0);
   // Build the body of the response
   std::string title = "Goldbach sums for ";  // + std::to_string(number);
@@ -136,7 +170,7 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     << "  <h1>" << title << "</h1>\n"
     << "<p>" << sums << "</p>\n";
   //-----------------
-  // Send the response to the client (user agent)
+  // Send the response to the client (user agent)*/
   return httpResponse.send();
 }
 /**

@@ -21,20 +21,20 @@ Task::Task(const Task& other){
 
 }
 
-Task::Task(HttpRequest* request, HttpResponse* response, size_t number, size_t index, size_t numbersToProcess, size_t *numbersProcessed){
+Task::Task(HttpRequest* request, HttpResponse* response, int64_t number,
+  size_t index, size_t numbersToProcess, size_t *numbersProcessed, std::vector<std::string>* result){
     this->request = request;
     this->response = response;
     this->number = number;
     this->index = index;
     this->numbersToProcess = numbersToProcess;
     this->numbersProcessed = numbersProcessed;
+    this->resultSums = result;
 }
 
 Task::~Task(){
 
 }
-
-
 
 bool Task::operator==(const Task& other) const {
     bool isEqual = this->index == other.index 
