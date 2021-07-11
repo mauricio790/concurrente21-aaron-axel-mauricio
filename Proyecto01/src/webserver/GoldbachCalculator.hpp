@@ -26,7 +26,6 @@ class GoldbachCalculator {
     void conFuerte(int64_t numero, bool esNegativo);
     void conDebil(int64_t numero, bool esNegativo);
     void goldbach(int64_t dato);
-    void formarString(int64_t number, int cantidad);
     void generadorHtml();
 };
 #endif  // GOLDBACHCALCULATOR_H

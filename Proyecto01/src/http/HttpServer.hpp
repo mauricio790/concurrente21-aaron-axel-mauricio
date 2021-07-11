@@ -10,7 +10,7 @@
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 #include "Queue.hpp"
-
+#include "Calculator.hpp"
 
 #include "common.hpp"
 
@@ -20,7 +20,10 @@ class HttpServer : public TcpServer {
 
  public:
   Queue <Socket> clients_queue;
+  Queue<Task> tasks_queue;
+  Queue<Task> producedTasks_queue;
   std::vector<HttpConnectionHandler*> connectionHandlers;
+  std::vector<Calculator*> calculators;
 
  protected:
   /// Lookup criteria for searching network information about this host

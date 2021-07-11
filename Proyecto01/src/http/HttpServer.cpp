@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+#include<unistd.h>
 
 #include "HttpServer.hpp"
 #include "HttpRequest.hpp"
@@ -35,9 +36,22 @@ void HttpServer::startThreads(int max_connections) {
     this->connectionHandlers[index]->setConsumingQueue(&clients_queue);
   }
 
-  // Start consuming
+  this->calculators.resize(sysconf(_SC_NPROCESSORS_ONLN));
+  for ( int index = 0; index < max_connections; ++index ) {
+    this->calculators[index] = new Calculator();
+    assert(this->calculators[index]);
+    this->calculators[index]->setConsumingQueue(&tasks_queue);
+    this->calculators[index]->setProducingQueue(&producedTasks_queue);
+  }
+
+  // Start consuming clients queue
   for ( int index = 0; index < max_connections; ++index ) {
     this->connectionHandlers[index]->startThread();
+  }
+
+  // Start consuming from tasks queue
+  for ( int index = 0; index < sysconf(_SC_NPROCESSORS_ONLN); ++index ) {
+    this->calculators[index]->startThread();
   }
 }
 
