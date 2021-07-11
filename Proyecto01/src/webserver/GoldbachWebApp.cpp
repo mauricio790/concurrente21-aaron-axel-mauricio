@@ -135,11 +135,13 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
 
     WebServer::getInstance().tasks_queue.push(task);
   
-  }/*
-  while(true){
+  }
+
+  size_t cont_respuestas = 0;
+  while(cont_respuestas < user_number_counter){
     std::cout << "que esta psandooo" <<std::endl;
     Task task_result = WebServer::getInstance().producedTasks_queue.pop();
-    if (*(task_result.request) == httpRequest) {
+    if (*(task_result.request) == httpRequest ) {
       setHeaders(httpResponse, 0);
     // Build the body of the response
     std::string title = "Goldbach sums for ";  // + std::to_string(number);
@@ -148,15 +150,12 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
       << "  <meta charset=\"ascii\"/>\n"
       << "  <title>" << title << "</title>\n"
       << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-      << "  <h1>" << title << "</h1>\n";
-      for(size_t index = 0; index < (*task_result.resultSums).size(); index++){
-        httpResponse.body() << "<p>" << (*task_result.resultSums).at(task_result.index) << "</p>\n";
-      }
-      break;
+      << "  <h1>" << title << "</h1>\n" << "<p>" << (*task_result.resultSums).at(task_result.index) << "</p>\n";
+      cont_respuestas++;
     } else {
       WebServer::getInstance().tasks_queue.push(task_result);
     }
-  }*/
+  }
   //delete numbers_Processed;
   /*
   setHeaders(httpResponse, 0);

@@ -7,23 +7,13 @@ Calculator::Calculator(){
 void Calculator::consume(const Task& task){
     GoldbachCalculator calculadora;
     Task newTask(task);
-
+    
     calculadora.leerDatos(task.number);
     std::cout << "numero a procesar: " << calculadora.sums_goldbach.str() << std::endl;
     newTask.resultSums->at(task.index) = calculadora.sums_goldbach.str();
     
-    this->mutex.lock();
-    std::cout << " Task: " << *task.numbersProcessed<< std::endl;
-    std::cout << " New Task: " << *newTask.numbersProcessed<< std::endl;
-    size_t aux = *(newTask.numbersProcessed);
-    *(newTask.numbersProcessed)++;
-    std::cout << " Task: " << *task.numbersProcessed<< std::endl;
-    std::cout << " New Task: " << *newTask.numbersProcessed<< std::endl;
-    if(*task.numbersProcessed == task.numbersToProcess){
-        std::cout << "Produce New Task" << std::endl;
-        this->produce(newTask);
-    }
-    this->mutex.unlock(); 
+      std::cout << "Produce New Task" << std::endl;
+      this->produce(newTask);
 }   
 
 /**

@@ -35,9 +35,8 @@ void HttpServer::startThreads(int max_connections) {
     assert(this->connectionHandlers[index]);
     this->connectionHandlers[index]->setConsumingQueue(&clients_queue);
   }
-
   this->calculators.resize(sysconf(_SC_NPROCESSORS_ONLN));
-  for ( int index = 0; index < max_connections; ++index ) {
+  for ( int index = 0; index < sysconf(_SC_NPROCESSORS_ONLN); ++index ) {
     this->calculators[index] = new Calculator();
     assert(this->calculators[index]);
     this->calculators[index]->setConsumingQueue(&tasks_queue);
