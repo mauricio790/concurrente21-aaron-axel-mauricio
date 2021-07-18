@@ -9,6 +9,9 @@
 #define TAG_REQUEST 0
 #define TAG_LONG_ROUTE 1 
 #define TAG_ROUTE 2
+
+#define RUTA_MAXIMA 1024
+
 class Mago{
  public:
   Mago();

@@ -4,6 +4,9 @@
 #include <fstream>
 #include <stdexcept>
 #include <mpi.h>
+
+
+
 /**
  * @brief Inicia el programa y verifica argumentos
  * @param argc cantidad de argumentos en la entrada
@@ -107,7 +110,7 @@ std::vector<std::string> Mago::get_mapas() {
   if (order.is_open()) {
     std::string linea;
     while ((std::getline(order, linea))) {
-      if (linea.length() > 0) {
+      if (linea.length() > 0 && linea.length()< RUTA_MAXIMA) {
         mapas.push_back(linea);
       }
     }
