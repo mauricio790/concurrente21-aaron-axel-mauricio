@@ -38,7 +38,6 @@ Mapa::Mapa(std::string ruta, std::string rutaSalida) {
   } else {
     throw std::runtime_error("No se pudo abrir el mapa");
   }
-  mapa_archivo.close();
 }
 /**
  * @brief Destructor de Mapa
