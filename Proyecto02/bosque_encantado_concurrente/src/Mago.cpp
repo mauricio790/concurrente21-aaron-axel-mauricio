@@ -22,7 +22,7 @@ int Mago::start(int argc, char* argv[]) {
     }
     Hechizo hechizo(num_threads);
     for (auto mapa : mapas) {
-      hechizo.hechizar(mapa);
+      hechizo.prepararHechizo(mapa);
     }
   } else {
       error = 1;

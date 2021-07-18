@@ -8,8 +8,9 @@
  * @details Abre y extrae la informacion y los valores del archivo mapa
  * @param ruta La ruta donde se encuentra el mapa 
  * */
-Mapa::Mapa(std::string ruta) {
+Mapa::Mapa(std::string ruta, std::string rutaSalida) {
   std::ifstream mapa_archivo;
+  this->rutaSalida = rutaSalida;
   mapa_archivo.open(ruta);
   if (mapa_archivo.is_open()) {
     std::string linea;
@@ -21,11 +22,9 @@ Mapa::Mapa(std::string ruta) {
     this->mapa = "";
     size_t lineas_leidas = 0;
     bool advertencia = false;
-    while (std::getline(mapa_archivo, linea)
-    && lineas_leidas < this->filas) {
+    while (std::getline(mapa_archivo, linea) && lineas_leidas < this->filas) {
       if (linea.length() == this->columnas) {
-        if (linea.length() > this->columnas
-        && !advertencia) {
+        if (linea.length() > this->columnas && !advertencia) {
           std::cout << ruta << " contiene lineas mas largas que lo establecido."
           << "Se omiten los caracteres restantes" << std::endl;
           advertencia = true;
@@ -33,12 +32,13 @@ Mapa::Mapa(std::string ruta) {
         mapa += linea;
         ++lineas_leidas;
       } else {
-          throw std::runtime_error("línea inválida");
-          }
+        throw std::runtime_error("línea inválida");
+      }
     }
   } else {
     throw std::runtime_error("No se pudo abrir el mapa");
-    }
+  }
+  mapa_archivo.close();
 }
 /**
  * @brief Destructor de Mapa
@@ -82,4 +82,28 @@ std::string Mapa::obtenerVecinos(const size_t &i) {
     }
 
     return vecinos;
+}
+
+/**
+ * @brief Crea un nuevo mapa de ser necesario en un archivo .txt
+ * @param mapa Mapa inicial del que se partirá para realizar los cambios
+ * @param medias_noches cantidad de noches que se verificará para el Mago
+ * @return void
+ * */
+void Mapa::escribirNuevoMapa(size_t noche) {
+  this->salida.open(this->rutaSalida + std::to_string(noche) + ".txt");
+  std::string linea = "";
+  for (size_t i = 0; i < this->area; i++) {
+    linea += this->mapa[i];
+    if ((i + 1) % this->columnas == 0) {
+      this->salida << linea;
+      linea = "";
+      if (i != this->area - 1) {
+        this->salida << std::endl;
+        linea = "";
+      }
+    }
+  }
+  this->salida << std::endl;
+  this->salida.close();
 }

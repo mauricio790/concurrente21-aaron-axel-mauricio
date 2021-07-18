@@ -14,11 +14,10 @@ class Hechizo{
  private:
   int num_threads;
  public:
-  std::ofstream salida;
   Hechizo(int num_of_threads);
   ~Hechizo();
   // crea un mapa y se deja la cantidad de medias noches
-  void hechizar(std::string mapa);
+  void prepararHechizo(std::string mapa);
   void hechizarMapa(Mapa& mapa, int medias_noches);
   char verificarReglas(Mapa& mapa, const size_t &i,
   size_t cant_arboles, size_t cant_lagos);
