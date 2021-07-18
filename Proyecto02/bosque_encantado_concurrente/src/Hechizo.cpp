@@ -62,12 +62,12 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches) {
   }
   std::string nuevoMapa;
   for (size_t noche = 0; noche < noches; ++noche) {
-        nuevoMapa = miMapa.mapa;
-#pragma omp parallel for num_threads(this->num_threads) \
-  default(none) shared(miMapa, nuevoMapa) schedule(static)
+    nuevoMapa = miMapa.mapa;
+    #pragma omp parallel for num_threads(this->num_threads) \
+    default(none) shared(miMapa, nuevoMapa) schedule(static)
     for (size_t celda = 0; celda < miMapa.area; ++celda) {
       std::string vecinos = miMapa.obtenerVecinos(celda);
-      nuevoMapa[celda] = this->verificarVecinos(miMapa, vecinos, celda);
+      nuevoMapa[celda] = std::move(this->verificarVecinos(miMapa, vecinos, celda));
     }
     miMapa.mapa = nuevoMapa;
     if (!imprimirHechizos) {
