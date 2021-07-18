@@ -9,6 +9,8 @@ class Mago{
   ~Mago();
   int start(int argc, char* argv[]);
  private:
+  void send_maps();
+  void receive_maps();
   int analyze_arguments(int argc, char* argv[]);
   std::vector<std::string> get_mapas();
  private:

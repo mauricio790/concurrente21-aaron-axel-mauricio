@@ -36,9 +36,10 @@ int Mago::start(int argc, char* argv[]) {
       } else { 
         std::cout << "Proceso: " << rank << std::endl;
         if (rank == 0) {
-          // Se tiene que enviar las senales
+          this->send_maps();
+        } else {
+          this->receive_maps();
         }
-          // Sino tiene que procesar algun mapa
       }
       MPI_Finalize();
     }
@@ -46,6 +47,39 @@ int Mago::start(int argc, char* argv[]) {
       error = 1;
     }
   return error;
+}
+
+void Mago::receive_maps(){
+
+}
+void Mago::send_maps(){ 
+  int TAG_REQUEST = 0;
+  int TAG_LONG_ROUTE = 1;
+  int TAG_ROUTE = 2;
+  std::vector<std::string> mapas = get_mapas();
+  size_t index_maps = 0;
+  int process_request = -1;
+  while (index_maps < mapas.size()) {
+    //Solicitudes otros porcesos
+    MPI_Recv(&process_request, 1 , MPI_INT, MPI_ANY_SOURCE, TAG_REQUEST, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+  }
+   //longitud del string
+  int32_t long_route = mapas[index_maps].length()  + 1;
+  MPI_Send(&long_route, 1, MPI_INT32_T, process_request, TAG_LONG_ROUTE, MPI_COMM_WORLD);
+
+  //String 
+  MPI_Send(mapas[index_maps].c_str(), long_route, MPI_SIGNED_CHAR, process_request, TAG_ROUTE, MPI_COMM_WORLD);
+
+  ++index_maps;
+// Condicion de parada 
+  int process_count = -1;
+  int stop_condition = 0;
+  MPI_Comm_size (MPI_COMM_WORLD,&process_count);
+
+  for (int range = 1; range < process_count; ++range) {
+    MPI_Recv (&process_request, 1, MPI_INT, MPI_ANY_SOURCE, TAG_REQUEST, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+     MPI_Send(&stop_condition, 1, MPI_INT32_T, range, TAG_LONG_ROUTE, MPI_COMM_WORLD);
+  }
 }
 
 /**
