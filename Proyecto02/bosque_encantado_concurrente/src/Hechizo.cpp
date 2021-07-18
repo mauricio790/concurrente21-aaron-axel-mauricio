@@ -23,7 +23,7 @@ Hechizo::~Hechizo() {
  * @param order orden de trabajo
  * @return void
  * */
-void Hechizo::hechizar(std::string order) {
+void Hechizo::prepararHechizo(std::string order) {
   std::string ruta;
   int medias_noches = 1;
   std::ifstream archivo_mapa(order);
@@ -33,13 +33,12 @@ void Hechizo::hechizar(std::string order) {
     medias_noches = std::stoi(order.substr(espacio));
     medias_noches += 0;
   }
-
+  std::string extention = ".txt";
+  std::string rutaSalida = "output/" +
+    ruta.substr(0, ruta.length() - extention.length()) + "-";
   // Crear archivo de salida y hechizar el mapa Hechizar(mapa)
   try{
-    Mapa mapa("input/" + ruta);
-    std::string extention = ".txt";
-    mapa.rutaSalida = "output/" +
-    ruta.substr(0, ruta.length() - extention.length()) + "-";
+    Mapa mapa("input/" + ruta, rutaSalida );
     this->hechizarMapa(mapa, medias_noches);
   } catch(const std::runtime_error& error){
     std::cout << error.what() << std::endl;
@@ -63,8 +62,8 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches) {
   std::string nuevoMapa;
   for (size_t noche = 0; noche < noches; ++noche) {
         nuevoMapa = mapa.mapa;
-#pragma omp parallel num_threads(this->num_threads) default(none) shared(mapa, nuevoMapa)
-#pragma omp for schedule(static)
+#pragma omp parallel for num_threads(this->num_threads) \
+  default(none) shared(mapa, nuevoMapa) schedule(static)
     for (size_t celda = 0; celda < mapa.area; ++celda) {
       std::string vecinos = mapa.obtenerVecinos(celda);
       nuevoMapa[celda] = this->verificarVecinos(mapa, vecinos, celda);
@@ -72,36 +71,14 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches) {
     mapa.mapa = nuevoMapa;
     if (!imprimirHechizos) {
       if (noche == noches - 1) {
-        this->escribirMapa(mapa, noche + 1);
+        mapa.escribirNuevoMapa(noche + 1);
       }
     } else {
-        this->escribirMapa(mapa, noche + 1);
+        mapa.escribirNuevoMapa(noche + 1);
       }
   }
 }
-/**
- * @brief Crea un nuevo mapa de ser necesario en un archivo .txt
- * @param mapa Mapa inicial del que se partirá para realizar los cambios
- * @param medias_noches cantidad de noches que se verificará para el Mago
- * @return void
- * */
-void Hechizo::escribirMapa(Mapa &mapa, size_t noche) {
-  this->salida.open(mapa.rutaSalida + std::to_string(noche) + ".txt");
-  std::string linea = "";
-  for (size_t i = 0; i < mapa.area; i++) {
-    linea += mapa.mapa[i];
-    if ((i + 1) % mapa.columnas == 0) {
-      this->salida << linea;
-      linea = "";
-      if (i != mapa.area - 1) {
-        this->salida << std::endl;
-        linea = "";
-      }
-    }
-  }
-  this->salida << std::endl;
-  this->salida.close();
-}
+
 /**
  * @brief Verifica cuantos vecinos de cierta clase tiene un caracter en el mapa
  * @param mapa Mapa inicial del que se partirá para realizar los cambios
@@ -133,8 +110,11 @@ char Hechizo::verificarVecinos(Mapa &mapa, std::string prueba, size_t i) {
 char Hechizo::verificarReglas(Mapa &mapa, const size_t &i,
 size_t cant_arboles, size_t cant_lagos) {
     char bosque = mapa.mapa[i];
-    if (mapa.mapa[i] == ARBOL && cant_lagos >= 4) {  // Inundacion
+    if (mapa.mapa[i] == ARBOL) {
+      if(cant_lagos >= 4)
         bosque = 'l';
+      if(cant_arboles > 4)
+        bosque = '-';
     }
     if (mapa.mapa[i] == LAGO && cant_lagos < 3) {  // Sequia
         bosque = '-';
@@ -142,9 +122,5 @@ size_t cant_arboles, size_t cant_lagos) {
     if (mapa.mapa[i] == PRADERA && cant_arboles >= 3) {  // Reforestacion
         bosque = 'a';
     }
-    if (mapa.mapa[i] == ARBOL && cant_arboles > 4) {  // Hacinamiento
-        bosque = '-';
-    }
-
     return bosque;
 }

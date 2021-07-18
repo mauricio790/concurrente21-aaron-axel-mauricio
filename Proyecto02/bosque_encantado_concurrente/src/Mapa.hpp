@@ -6,15 +6,18 @@
 
 class Mapa{
  public:
-  Mapa() = delete;
-  explicit Mapa(std::string ruta);
-  ~Mapa();
   size_t filas;
   size_t columnas;
   size_t area;
   std::string mapa;
   std::string rutaSalida;
+  std::ofstream salida;
+
+  Mapa() = delete;
+  explicit Mapa(std::string ruta, std::string rutaSalida);
+  ~Mapa();
   std::string obtenerVecinos(const size_t &i);
+  void escribirNuevoMapa(size_t noche);
 };
 
 #endif
