@@ -117,7 +117,7 @@ std::vector<std::string> Mago::get_mapas() {
   } else {
       throw std::runtime_error("No se pudo abrir archivo");
     }
-    
+  order.close();
   return mapas;
 }
 /**
