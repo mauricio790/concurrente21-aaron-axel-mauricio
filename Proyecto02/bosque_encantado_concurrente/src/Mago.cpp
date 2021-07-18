@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include <mpi.h>
 /**
  * @brief Inicia el programa y verifica argumentos
  * @param argc cantidad de argumentos en la entrada
@@ -13,16 +14,33 @@ int Mago::start(int argc, char* argv[]) {
   int error = 0;
   std::string linea;
   if (analyze_arguments(argc, argv)) {
-    std::vector<std::string> mapas;
-    try{
-      mapas = get_mapas();
-    }catch(const std::runtime_error& error){
-      std::cout << error.what() << std::endl;
-      return 1;
-    }
-    Hechizo hechizo(num_threads);
-    for (auto mapa : mapas) {
-      hechizo.prepararHechizo(mapa);
+    if (MPI_Init(&argc, &argv) == MPI_SUCCESS) {
+      int rank = -1;
+      MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+
+      int process_count = 0;
+      MPI_Comm_size(MPI_COMM_WORLD, &process_count);
+
+      if (process_count <= 1) {
+        std::vector<std::string> mapas;
+        try{
+          mapas = get_mapas();
+        }catch(const std::runtime_error& error){
+          std::cout << error.what() << std::endl;
+          return 1;
+        }
+        Hechizo hechizo(num_threads);
+        for (auto mapa : mapas) {
+        hechizo.prepararHechizo(mapa);
+        }
+      } else { 
+        std::cout << "Proceso: " << rank << std::endl;
+        if (rank == 0) {
+          // Se tiene que enviar las senales
+        }
+          // Sino tiene que procesar algun mapa
+      }
+      MPI_Finalize();
     }
   } else {
       error = 1;

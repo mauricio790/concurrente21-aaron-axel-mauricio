@@ -1,4 +1,4 @@
-CXX=g++
+CXX=mpic++
 FLAGS=$(strip -Wall -Wextra -fopenmp -std=gnu++11 $(DEFS))
 LIBS=-pthread
 LINTFILTERS=$\
