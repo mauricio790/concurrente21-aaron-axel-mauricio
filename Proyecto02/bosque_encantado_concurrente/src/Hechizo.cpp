@@ -53,6 +53,7 @@ void Hechizo::prepararHechizo(std::string order) {
  * */
 void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches) {
   size_t noches;
+  Mapa miMapa = std::move(mapa);
   bool imprimirHechizos = medias_noches > 0;
   if (!imprimirHechizos) {
       noches = medias_noches * -1;
@@ -61,20 +62,20 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches) {
   }
   std::string nuevoMapa;
   for (size_t noche = 0; noche < noches; ++noche) {
-        nuevoMapa = mapa.mapa;
+        nuevoMapa = miMapa.mapa;
 #pragma omp parallel for num_threads(this->num_threads) \
-  default(none) shared(mapa, nuevoMapa) schedule(static)
-    for (size_t celda = 0; celda < mapa.area; ++celda) {
-      std::string vecinos = mapa.obtenerVecinos(celda);
-      nuevoMapa[celda] = this->verificarVecinos(mapa, vecinos, celda);
+  default(none) shared(miMapa, nuevoMapa) schedule(static)
+    for (size_t celda = 0; celda < miMapa.area; ++celda) {
+      std::string vecinos = miMapa.obtenerVecinos(celda);
+      nuevoMapa[celda] = this->verificarVecinos(miMapa, vecinos, celda);
     }
-    mapa.mapa = nuevoMapa;
+    miMapa.mapa = nuevoMapa;
     if (!imprimirHechizos) {
       if (noche == noches - 1) {
-        mapa.escribirNuevoMapa(noche + 1);
+        miMapa.escribirNuevoMapa(noche + 1);
       }
     } else {
-        mapa.escribirNuevoMapa(noche + 1);
+        miMapa.escribirNuevoMapa(noche + 1);
       }
   }
 }
@@ -87,6 +88,7 @@ void Hechizo::hechizarMapa(Mapa &mapa, int medias_noches) {
  * @return caracter modificado
  * */
 char Hechizo::verificarVecinos(Mapa &mapa, std::string prueba, size_t i) {
+  Mapa miMapa = std::move(mapa);
   size_t cant_arboles = 0;
   size_t cant_lagos = 0;
   for (size_t j = 0; j < prueba.length(); j++) {
@@ -97,7 +99,7 @@ char Hechizo::verificarVecinos(Mapa &mapa, std::string prueba, size_t i) {
       cant_lagos++;
     }
   }
-  return verificarReglas(mapa, i, cant_arboles, cant_lagos);
+  return verificarReglas(miMapa, i, cant_arboles, cant_lagos);
 }
 /**
  * @brief Verifica las reglas del Mago, si alguna se cumple, el caracter se modifica
@@ -109,17 +111,18 @@ char Hechizo::verificarVecinos(Mapa &mapa, std::string prueba, size_t i) {
  * */
 char Hechizo::verificarReglas(Mapa &mapa, const size_t &i,
 size_t cant_arboles, size_t cant_lagos) {
+  Mapa miMapa = std::move(mapa);
     char bosque = mapa.mapa[i];
-    if (mapa.mapa[i] == ARBOL) {
+    if (miMapa.mapa[i] == ARBOL) {
       if(cant_lagos >= 4)
         bosque = 'l';
       if(cant_arboles > 4)
         bosque = '-';
     }
-    if (mapa.mapa[i] == LAGO && cant_lagos < 3) {  // Sequia
+    if (miMapa.mapa[i] == LAGO && cant_lagos < 3) {  // Sequia
         bosque = '-';
     }
-    if (mapa.mapa[i] == PRADERA && cant_arboles >= 3) {  // Reforestacion
+    if (miMapa.mapa[i] == PRADERA && cant_arboles >= 3) {  // Reforestacion
         bosque = 'a';
     }
     return bosque;
