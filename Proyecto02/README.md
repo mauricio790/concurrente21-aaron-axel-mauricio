@@ -16,7 +16,7 @@ Usando la orden de trabajo `job002.txt` modificada de la siguiente manera:
 ~~~
 map101.txt -50
 map103.txt -40
-map105.txt -25`
+map105.txt -25
 ~~~
 El programa serial tuvo un rendimiento de 3 minutos 9 segundos aproximadamente.
 
