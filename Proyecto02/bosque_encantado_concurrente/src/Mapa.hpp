@@ -11,7 +11,7 @@ class Mapa{
   size_t area;
   std::string mapa;
   std::string rutaSalida;
-  std::ofstream salida;
+  
 
   Mapa() = delete;
   explicit Mapa(std::string ruta, std::string rutaSalida);
