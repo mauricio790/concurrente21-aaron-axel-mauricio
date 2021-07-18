@@ -105,5 +105,4 @@ void Mapa::escribirNuevoMapa(size_t noche) {
     }
   }
   salida << std::endl;
-  salida.close();
 }
