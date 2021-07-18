@@ -17,7 +17,6 @@ int Mago::start(int argc, char* argv[]) {
     if (MPI_Init(&argc, &argv) == MPI_SUCCESS) {
       int rank = -1;
       MPI_Comm_rank (MPI_COMM_WORLD, &rank);
-
       int process_count = 0;
       MPI_Comm_size(MPI_COMM_WORLD, &process_count);
 
@@ -50,27 +49,42 @@ int Mago::start(int argc, char* argv[]) {
 }
 
 void Mago::receive_maps(){
+  int rank = -1;
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  Hechizo hechizo (num_threads);
+  int32_t long_route = -1;
+  while (long_route != 0) {
+    MPI_Send(&rank , 1, MPI_INT, ROOT_PROCESS, TAG_REQUEST, MPI_COMM_WORLD);
+    MPI_Recv(&long_route , 1, MPI_INT32_T, ROOT_PROCESS, TAG_LONG_ROUTE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    if (long_route > 0 ) {
+       std::vector<char> route (long_route, '\0');
+       MPI_Recv(&route[0], long_route + 1, MPI_SIGNED_CHAR, ROOT_PROCESS, TAG_ROUTE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
+       try {
+         std::string arguments(route.begin(), route.end());
+         hechizo.prepararHechizo(arguments);
+       } catch (std::runtime_error& e){
+         std::cout << "Error: " << e.what() << std::endl;
+       }
+    }
+  }
 }
-void Mago::send_maps(){ 
-  int TAG_REQUEST = 0;
-  int TAG_LONG_ROUTE = 1;
-  int TAG_ROUTE = 2;
+void Mago::send_maps(){
   std::vector<std::string> mapas = get_mapas();
   size_t index_maps = 0;
   int process_request = -1;
   while (index_maps < mapas.size()) {
     //Solicitudes otros porcesos
     MPI_Recv(&process_request, 1 , MPI_INT, MPI_ANY_SOURCE, TAG_REQUEST, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-  }
    //longitud del string
-  int32_t long_route = mapas[index_maps].length()  + 1;
-  MPI_Send(&long_route, 1, MPI_INT32_T, process_request, TAG_LONG_ROUTE, MPI_COMM_WORLD);
+    int32_t long_route = mapas[index_maps].length()  + 1;
+    MPI_Send(&long_route, 1, MPI_INT32_T, process_request, TAG_LONG_ROUTE, MPI_COMM_WORLD);
 
-  //String 
-  MPI_Send(mapas[index_maps].c_str(), long_route, MPI_SIGNED_CHAR, process_request, TAG_ROUTE, MPI_COMM_WORLD);
+    //String 
+   MPI_Send(mapas[index_maps].c_str(), long_route, MPI_SIGNED_CHAR, process_request, TAG_ROUTE, MPI_COMM_WORLD);
 
-  ++index_maps;
+    ++index_maps;
+  }
 // Condicion de parada 
   int process_count = -1;
   int stop_condition = 0;
@@ -128,7 +142,7 @@ int Mago::analyze_arguments(int argc, char* argv[]) {
       job_order = argv[1];
       try{
         num_threads = std::stoi(argv[2]);
-      }catch(std::exception const & e){
+      }catch(std::runtime_error& e){
         std::cout << "Error: invalid number of threads\n" << std::endl;
         return 0;
       }

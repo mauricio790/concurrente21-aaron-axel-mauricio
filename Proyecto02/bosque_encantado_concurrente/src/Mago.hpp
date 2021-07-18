@@ -3,6 +3,12 @@
 
 #include<vector>
 #include<string>
+
+#define ROOT_PROCESS 0
+#define MAX_ROUTE 1024
+#define TAG_REQUEST 0
+#define TAG_LONG_ROUTE 1 
+#define TAG_ROUTE 2
 class Mago{
  public:
   Mago();
