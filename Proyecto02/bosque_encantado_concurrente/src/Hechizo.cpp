@@ -6,7 +6,7 @@
  * @param num_of_threads cantidad de hilos
  * */ 
 Hechizo::Hechizo(int num_of_threads) {
-  if(num_of_threads == 0) {
+  if (num_of_threads == 0) {
     this->num_threads = omp_get_max_threads();
   } else {
     this->num_threads = num_of_threads;
@@ -37,12 +37,12 @@ void Hechizo::prepararHechizo(std::string order) {
   std::string rutaSalida = "output/" +
     ruta.substr(0, ruta.length() - extention.length()) + "-";
   // Crear archivo de salida y hechizar el mapa Hechizar(mapa)
-  try{
-    Mapa mapa("input/" + ruta, rutaSalida );
+  try {
+    Mapa mapa("input/" + ruta, rutaSalida);
     this->hechizarMapa(mapa, medias_noches);
-  } catch(const std::runtime_error& error){
+  } catch(const std::runtime_error& error) {
     std::cout << error.what() << std::endl;
-  };
+  }
 }
 /**
  * @brief Se encarga de realizar todos los cambios necesarios al mapa durante todas las medias noches
@@ -111,9 +111,9 @@ char Hechizo::verificarReglas(Mapa &mapa, const size_t &i,
 size_t cant_arboles, size_t cant_lagos) {
     char bosque = mapa.mapa[i];
     if (mapa.mapa[i] == ARBOL) {
-      if(cant_lagos >= 4)
+      if (cant_lagos >= 4)
         bosque = 'l';
-      if(cant_arboles > 4)
+      if (cant_arboles > 4)
         bosque = '-';
     }
     if (mapa.mapa[i] == LAGO && cant_lagos < 3) {  // Sequia

@@ -91,7 +91,7 @@ std::string Mapa::obtenerVecinos(const size_t &i) {
  * @return void
  * */
 void Mapa::escribirNuevoMapa(size_t noche) {
-  std::ofstream salida; 
+  std::ofstream salida;
   salida.open(this->rutaSalida + std::to_string(noche) + ".txt");
   std::string linea = "";
   for (size_t i = 0; i < this->area; i++) {

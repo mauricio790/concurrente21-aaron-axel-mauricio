@@ -24,7 +24,6 @@ class Hechizo{
   char verificarVecinos(Mapa& mapa, std::string prueba, size_t i);
  private:
   void escribirMapa(Mapa& mapa, size_t noche);
-  
 };
 
 #endif

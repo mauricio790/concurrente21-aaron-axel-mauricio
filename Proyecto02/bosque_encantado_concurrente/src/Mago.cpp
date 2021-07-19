@@ -19,15 +19,15 @@ int Mago::start(int argc, char* argv[]) {
   if (analyze_arguments(argc, argv)) {
     if (MPI_Init(&argc, &argv) == MPI_SUCCESS) {
       int rank = -1;
-      MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+      MPI_Comm_rank(MPI_COMM_WORLD, &rank);
       int process_count = 0;
       MPI_Comm_size(MPI_COMM_WORLD, &process_count);
 
       if (process_count <= 1) {
         std::vector<std::string> mapas;
-        try{
+        try {
           mapas = get_mapas();
-        }catch(const std::runtime_error& error){
+        } catch(const std::runtime_error& error) {
           std::cout << error.what() << std::endl;
           return 1;
         }
@@ -35,7 +35,7 @@ int Mago::start(int argc, char* argv[]) {
         for (auto mapa : mapas) {
         hechizo.prepararHechizo(mapa);
         }
-      } else { 
+      } else {
         std::cout << "Proceso: " << rank << std::endl;
         if (rank == 0) {
           this->send_maps();
@@ -51,51 +51,57 @@ int Mago::start(int argc, char* argv[]) {
   return error;
 }
 
-void Mago::receive_maps(){
+void Mago::receive_maps() {
   int rank = -1;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  Hechizo hechizo (num_threads);
+  Hechizo hechizo(num_threads);
   int32_t long_route = -1;
   while (long_route != 0) {
     MPI_Send(&rank , 1, MPI_INT, ROOT_PROCESS, TAG_REQUEST, MPI_COMM_WORLD);
-    MPI_Recv(&long_route , 1, MPI_INT32_T, ROOT_PROCESS, TAG_LONG_ROUTE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    if (long_route > 0 ) {
-       std::vector<char> route (long_route, '\0');
-       MPI_Recv(&route[0], long_route + 1, MPI_SIGNED_CHAR, ROOT_PROCESS, TAG_ROUTE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
+    MPI_Recv(&long_route , 1, MPI_INT32_T, ROOT_PROCESS, TAG_LONG_ROUTE,
+    MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    if (long_route > 0) {
+       std::vector<char> route(long_route, '\0');
+       MPI_Recv(&route[0], long_route + 1, MPI_SIGNED_CHAR, ROOT_PROCESS,
+       TAG_ROUTE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
        try {
          std::string arguments(route.begin(), route.end());
          hechizo.prepararHechizo(arguments);
-       } catch (std::runtime_error& e){
+       } catch (std::runtime_error& e) {
          std::cout << "Error: " << e.what() << std::endl;
        }
     }
   }
 }
-void Mago::send_maps(){
+void Mago::send_maps() {
   std::vector<std::string> mapas = get_mapas();
   size_t index_maps = 0;
   int process_request = -1;
   while (index_maps < mapas.size()) {
-    //Solicitudes otros porcesos
-    MPI_Recv(&process_request, 1 , MPI_INT, MPI_ANY_SOURCE, TAG_REQUEST, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-   //longitud del string
+    // Solicitudes otros porcesos
+    MPI_Recv(&process_request, 1 , MPI_INT, MPI_ANY_SOURCE,
+    TAG_REQUEST, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    // longitud del string
     int32_t long_route = mapas[index_maps].length()  + 1;
-    MPI_Send(&long_route, 1, MPI_INT32_T, process_request, TAG_LONG_ROUTE, MPI_COMM_WORLD);
+    MPI_Send(&long_route, 1, MPI_INT32_T, process_request,
+    TAG_LONG_ROUTE, MPI_COMM_WORLD);
 
-    //String 
-   MPI_Send(mapas[index_maps].c_str(), long_route, MPI_SIGNED_CHAR, process_request, TAG_ROUTE, MPI_COMM_WORLD);
+    // String
+    MPI_Send(mapas[index_maps].c_str(), long_route,
+    MPI_SIGNED_CHAR, process_request, TAG_ROUTE, MPI_COMM_WORLD);
 
     ++index_maps;
   }
-// Condicion de parada 
+// Condicion de parada
   int process_count = -1;
   int stop_condition = 0;
-  MPI_Comm_size (MPI_COMM_WORLD,&process_count);
+  MPI_Comm_size(MPI_COMM_WORLD, &process_count);
 
   for (int range = 1; range < process_count; ++range) {
-    MPI_Recv (&process_request, 1, MPI_INT, MPI_ANY_SOURCE, TAG_REQUEST, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-     MPI_Send(&stop_condition, 1, MPI_INT32_T, range, TAG_LONG_ROUTE, MPI_COMM_WORLD);
+    MPI_Recv(&process_request, 1, MPI_INT, MPI_ANY_SOURCE,
+    TAG_REQUEST, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+     MPI_Send(&stop_condition, 1, MPI_INT32_T, range,
+     TAG_LONG_ROUTE, MPI_COMM_WORLD);
   }
 }
 
@@ -142,11 +148,11 @@ int Mago::analyze_arguments(int argc, char* argv[]) {
     num_threads = 0;
     return 1;
   } else {
-    if(argc == 3){
+    if (argc == 3) {
       job_order = argv[1];
-      try{
+      try {
         num_threads = std::stoi(argv[2]);
-      }catch(std::runtime_error& e){
+      } catch(std::runtime_error& e) {
         std::cout << "Error: invalid number of threads\n" << std::endl;
         return 0;
       }
