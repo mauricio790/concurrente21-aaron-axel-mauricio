@@ -501,7 +501,7 @@ Created with Workflow PetriNet Designer Version 3.2.0 (woped.org)-->
       </inscription>
       <graphics>
         <position x="930" y="290"/>
-        <position x="930" y="380"/>
+        <position x="930" y="370"/>
         <position x="260" y="370"/>
       </graphics>
       <toolspecific tool="WoPeD" version="1.0">

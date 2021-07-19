@@ -32,10 +32,6 @@ Observando el comportamiento del código, se analizó el implementar que cada hi
 El diseño propuesto es el siguiente:
 ![Petri](img/petri_desing.jpg "Diseño Petri")
 
-#### Diseño Concurrente y Distribuido
-El diseño propuesto para el segundo avance de este proyecto es el siguiente:
-![Petri_dist](img/petri_desing_dist.jpg "Diseño Petri Distribuido")
-
 #### Rendimiento respecto a la versión serial
 
 Luego de la implementación haciendo uso de OMP, se corrió nuevamente el caso de prueba previamente mencionado. El test concurrente se realizó en una máquina local de 4 núcleos (y 4 hilos) y se tomó el promedio de 3 tiempos para realizar el análisis.
