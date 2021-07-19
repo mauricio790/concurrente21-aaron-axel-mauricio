@@ -153,7 +153,7 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
       << "  <h1>" << title << "</h1>\n" << "<p>" << (*task_result.resultSums).at(task_result.index) << "</p>\n";
       cont_respuestas++;
     } else {
-      WebServer::getInstance().tasks_queue.push(task_result);
+      WebServer::getInstance().producedTasks_queue.push(task_result);
     }
   }
   //delete numbers_Processed;
