@@ -64,8 +64,7 @@ void GoldbachCalculator::conFuerte(int64_t numero, bool esNegativo) {
       if (num_1 <= numero - num_1) {
         cantidad++;
         cantSumas++;
-        /*Check if this number activates the boolean of
-         if it is negative to save the sums.*/
+        /*Check if this number activates the boolean of if it is negative to save the sums.*/
         if (esNegativo) {
             GoldbachCalculator::Sumas sumas;
             sumas.num1 = num_1;
@@ -95,16 +94,14 @@ void GoldbachCalculator::conDebil(int64_t numero, bool esNegativo) {
     if (esPrimo(num_1)) {
       for (int64_t num_2 = num_1; (num_2 * 2) < numero; num_2+=2) {
         if (esPrimo(num_2)) {
-          //for (int64_t num_3 = num_2; num_3 < numero; num_3++) {
-            /*Check if the sum of the numbers
-             * prime equals the number entered*/
+            /*Check if the sum of the numbers prime equals the number entered*/
             if (num_1 + num_2 < numero){
               num_3 = numero - num_1 - num_2;
             }
-            if (num_3 > 2 && num_1 <= num_2 && num_2 <= num_3 && esPrimo(num_3)) {
+            if (num_3 > 2 && num_1 <= num_2 && num_2 <= num_3
+              && esPrimo(num_3)) {
               cantidad++;
-                /*Check if this number activates the boolean of
-                * if it is negative to save the sums.*/
+                /*Check if this number activates the boolean of * if it is negative to save the sums.*/
               if (esNegativo) {
                 GoldbachCalculator::Sumas sumas;
                 sumas.num1 = num_1;
@@ -114,7 +111,6 @@ void GoldbachCalculator::conDebil(int64_t numero, bool esNegativo) {
               }
             }
           }
-        //}
         if (num_2 == 2) {
           num_2 = 1;
         }
@@ -152,10 +148,9 @@ bool GoldbachCalculator::esPrimo(int64_t numero) {
   bool numPrimo = true;
   if (numero % 2 == 0 && numero > 2) {
     return false;
-  } 
+  }
   for (int64_t divisor = 3; divisor <= sqrt(numero) && numPrimo; divisor+=2) {
     // Verifica si el numero tiene algun divisor, que no sea el mismo o 1.
-     //printf("NUmero: %d Divisor: %d \n",numero,divisor);
     if (numero % divisor == 0) {
       return false;
     }

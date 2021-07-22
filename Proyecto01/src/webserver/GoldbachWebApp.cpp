@@ -46,7 +46,6 @@ HttpResponse& httpResponse) {
         return this->serveNotFound(httpRequest, httpResponse);
       }
       numbers_in_URL = num_matches.suffix().str();
-
     }
     return this->serveGoldbachSums(httpRequest, httpResponse, &user_numbers);
   }
@@ -113,8 +112,10 @@ bool GoldbachWebApp::serveNotFound(HttpRequest& httpRequest
 }
 
 /**
- * @brief Calculate the goldbach sums of a number asked by the client
- * @details Sends the response in HTML format as HTTP response
+ * @brief Send the client numbers to the Goldbach Calculator
+ * @details Push the client numbers as Task to the calculators threads queue,
+ *          afterwards if all the numbers were processed, send the response to
+ *          the client 
  * @param httpRequest Http request (client request)
  * @param httpResponse Http response
  * @param user_numbers Vector of type int64_t, contains the client values
@@ -127,53 +128,34 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
   size_t numbers_Processed = 1;
   std::vector<std::string> result;
   result.resize(user_number_counter);
-
-  for(size_t index = 0; index < user_number_counter; index++){
-    
+  for (size_t index = 0; index < user_number_counter; index++) {
     Task task(&httpRequest, &httpResponse ,(*user_numbers)[index],
       index,(size_t)user_number_counter, &numbers_Processed, &result);
-
     WebServer::getInstance().tasks_queue.push(task);
-  
   }
-
   setHeaders(httpResponse, 0);
   std::string title = "Goldbach Sums";
   setPageTitle(httpResponse, title);
   size_t cont_respuestas = 0;
-  while(cont_respuestas < user_number_counter){
-    //std::cout << "que esta psandooo" <<std::endl;
+  while (cont_respuestas < user_number_counter) {
     Task task_result = WebServer::getInstance().producedTasks_queue.pop();
     if (*(task_result.request) == httpRequest ) {
-      
     // Build the body of the response
-      httpResponse.body() << "<p>" << (*task_result.resultSums).at(task_result.index) << "</p>\n";
+      httpResponse.body() << "<p>"
+        << (*task_result.resultSums).at(task_result.index) << "</p>\n";
       cont_respuestas++;
     } else {
       WebServer::getInstance().producedTasks_queue.push(task_result);
     }
   }
-  //delete numbers_Processed;
-  /*
-  setHeaders(httpResponse, 0);
-  // Build the body of the response
-  std::string title = "Goldbach sums for ";  // + std::to_string(number);
-  httpResponse.body() << "<!DOCTYPE html>\n"
-    << "<html lang=\"en\">\n"
-    << "  <meta charset=\"ascii\"/>\n"
-    << "  <title>" << title << "</title>\n"
-    << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-    << "  <h1>" << title << "</h1>\n"
-    << "<p>" << sums << "</p>\n";
-  //-----------------
-  // Send the response to the client (user agent)*/
+  // Send the response to the client (user agent)
   return httpResponse.send();
 }
 /**
  * @brief Set HTTP response metadata (headers)
  * @details Set the headers of HTTP response
  * @param httpResponse Http response
- * @param error codigo de error
+ * @param error error code
  * */
 void GoldbachWebApp::setHeaders(HttpResponse& httpResponse, int error) {
   if (error == 404)
@@ -183,11 +165,17 @@ void GoldbachWebApp::setHeaders(HttpResponse& httpResponse, int error) {
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
 }
 
-void GoldbachWebApp::setPageTitle(HttpResponse& httpResponse, std::string title){
+/**
+ * @brief Set the Response Page for the Client
+ * @param httpResponse Http response
+ * @param title title to set
+ * */
+void GoldbachWebApp::setPageTitle(HttpResponse& httpResponse
+  , std::string title) {
   httpResponse.body() << "<!DOCTYPE html>\n"
-      << "<html lang=\"en\">\n"
-      << "  <meta charset=\"ascii\"/>\n"
-      << "  <title>" << title << "</title>\n"
-      << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-      << "  <h1>" << title << "</h1>\n";
+    << "<html lang=\"en\">\n"
+    << "  <meta charset=\"ascii\"/>\n"
+    << "  <title>" << title << "</title>\n"
+    << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
+    << "  <h1>" << title << "</h1>\n";
 }
