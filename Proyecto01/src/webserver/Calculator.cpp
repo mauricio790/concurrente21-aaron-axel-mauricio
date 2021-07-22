@@ -9,11 +9,8 @@ void Calculator::consume(const Task& task){
     Task newTask(task);
     
     calculadora.leerDatos(task.number);
-    std::cout << "numero a procesar: " << calculadora.sums_goldbach.str() << std::endl;
     newTask.resultSums->at(task.index) = calculadora.sums_goldbach.str();
-    
-      std::cout << "Produce New Task" << std::endl;
-      this->produce(newTask);
+    this->produce(newTask);
 }   
 
 /**

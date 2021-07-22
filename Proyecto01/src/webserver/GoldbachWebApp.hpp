@@ -28,6 +28,8 @@ class GoldbachWebApp{
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers);
   // Set HTTP response metadata (headers)
   void setHeaders(HttpResponse& httpResponse, int error);
+  //
+  void setPageTitle(HttpResponse& httpResponse, std::string title);
 };
 
 #endif

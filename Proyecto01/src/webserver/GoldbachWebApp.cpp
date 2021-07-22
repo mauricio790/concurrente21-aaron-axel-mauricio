@@ -137,20 +137,17 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
   
   }
 
+  setHeaders(httpResponse, 0);
+  std::string title = "Goldbach Sums";
+  setPageTitle(httpResponse, title);
   size_t cont_respuestas = 0;
   while(cont_respuestas < user_number_counter){
-    std::cout << "que esta psandooo" <<std::endl;
+    //std::cout << "que esta psandooo" <<std::endl;
     Task task_result = WebServer::getInstance().producedTasks_queue.pop();
     if (*(task_result.request) == httpRequest ) {
-      setHeaders(httpResponse, 0);
+      
     // Build the body of the response
-    std::string title = "Goldbach sums for ";  // + std::to_string(number);
-    httpResponse.body() << "<!DOCTYPE html>\n"
-      << "<html lang=\"en\">\n"
-      << "  <meta charset=\"ascii\"/>\n"
-      << "  <title>" << title << "</title>\n"
-      << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
-      << "  <h1>" << title << "</h1>\n" << "<p>" << (*task_result.resultSums).at(task_result.index) << "</p>\n";
+      httpResponse.body() << "<p>" << (*task_result.resultSums).at(task_result.index) << "</p>\n";
       cont_respuestas++;
     } else {
       WebServer::getInstance().producedTasks_queue.push(task_result);
@@ -184,4 +181,13 @@ void GoldbachWebApp::setHeaders(HttpResponse& httpResponse, int error) {
 
   httpResponse.setHeader("Server", "AttoServer v1.0");
   httpResponse.setHeader("Content-type", "text/html; charset=ascii");
+}
+
+void GoldbachWebApp::setPageTitle(HttpResponse& httpResponse, std::string title){
+  httpResponse.body() << "<!DOCTYPE html>\n"
+      << "<html lang=\"en\">\n"
+      << "  <meta charset=\"ascii\"/>\n"
+      << "  <title>" << title << "</title>\n"
+      << "  <style>body {font-family: monospace} .err {color: red}</style>\n"
+      << "  <h1>" << title << "</h1>\n";
 }
