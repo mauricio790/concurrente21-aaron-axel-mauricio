@@ -63,8 +63,17 @@ void HttpServer::stop(int max_connections) {
   for ( int index = 0; index < max_connections; ++index ) {
     this->connectionHandlers[index]->sendStopCondition();
   }
+  for ( int index = 0; index < sysconf(_SC_NPROCESSORS_ONLN); ++index ) {
+    this->calculators[index]->sendStopCondition();
+  }
+
+
   for ( int index = 0; index < max_connections; ++index ) {
     this->connectionHandlers[index]->waitToFinish();
+  }
+  
+  for ( int index = 0; index < sysconf(_SC_NPROCESSORS_ONLN); ++index ) {
+    this->calculators[index]->waitToFinish();
   }
 }
 

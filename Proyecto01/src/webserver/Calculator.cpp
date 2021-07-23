@@ -1,7 +1,6 @@
 #include"Calculator.hpp"
 
 Calculator::Calculator(){
-
 }
 
 void Calculator::consume(const Task& task){

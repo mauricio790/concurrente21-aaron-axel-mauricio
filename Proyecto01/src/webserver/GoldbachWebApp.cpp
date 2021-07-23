@@ -125,7 +125,6 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
     , HttpResponse& httpResponse, std::vector<int64_t>* user_numbers) {
   (void)httpRequest;
   size_t user_number_counter = (*user_numbers).size();
-  size_t numbers_Processed = 1;
   std::vector<std::string> result;
   //std::vector<Task> 
   result.resize(user_number_counter);

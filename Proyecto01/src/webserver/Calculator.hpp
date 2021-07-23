@@ -14,10 +14,6 @@ class Calculator : public Assembler<Task,Task>{
         /// Override this method to process any data extracted from the queue
         void consume(const Task& task) override;
         void sendStopCondition();
-
-    public:  
-    /// All read or write operations are mutually exclusive
-    std::mutex mutex;
 };
 
 #endif  
