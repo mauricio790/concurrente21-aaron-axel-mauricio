@@ -127,6 +127,7 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
   size_t user_number_counter = (*user_numbers).size();
   size_t numbers_Processed = 1;
   std::vector<std::string> result;
+  //std::vector<Task> 
   result.resize(user_number_counter);
   for (size_t index = 0; index < user_number_counter; index++) {
     Task task(&httpRequest, &httpResponse ,(*user_numbers)[index],
@@ -140,13 +141,15 @@ bool GoldbachWebApp::serveGoldbachSums(HttpRequest& httpRequest
   while (cont_respuestas < user_number_counter) {
     Task task_result = WebServer::getInstance().producedTasks_queue.pop();
     if (*(task_result.request) == httpRequest ) {
-    // Build the body of the response
-      httpResponse.body() << "<p>"
-        << (*task_result.resultSums).at(task_result.index) << "</p>\n";
+      result[task_result.index] = (*task_result.resultSums).at(task_result.index);
       cont_respuestas++;
     } else {
       WebServer::getInstance().producedTasks_queue.push(task_result);
     }
+  }
+
+  for(size_t index = 0; index < user_number_counter; index++){
+     httpResponse.body() << "<p>" << result[index] << "</p>\n";
   }
   // Send the response to the client (user agent)
   return httpResponse.send();
