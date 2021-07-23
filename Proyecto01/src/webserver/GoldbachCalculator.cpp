@@ -23,10 +23,11 @@ GoldbachCalculator::~GoldbachCalculator() {
 void GoldbachCalculator::leerDatos(int64_t number) {
   GeneradorHtml generadorHtml;
     goldbach(number);
-    //sums_goldbach << number << ": ";
+    // sums_goldbach << number << ": ";
   /* After traversing the vector, it is invoked
    * to the method that forms the string of sums */
-  sums_goldbach = generadorHtml.generarHtml(&sumGoldbach,cant_sumGoldbach[0],number);
+  sums_goldbach = generadorHtml.generarHtml
+  (&sumGoldbach, cant_sumGoldbach[0], number);
 }
 /**
  * @brief This method verifies that the number entered has a solution 
@@ -64,7 +65,8 @@ void GoldbachCalculator::conFuerte(int64_t numero, bool esNegativo) {
       if (num_1 <= numero - num_1) {
         cantidad++;
         cantSumas++;
-        /*Check if this number activates the boolean of if it is negative to save the sums.*/
+        /*Check if this number activates the boolean 
+         * of if it is negative to save the sums.*/
         if (esNegativo) {
             GoldbachCalculator::Sumas sumas;
             sumas.num1 = num_1;
@@ -95,13 +97,14 @@ void GoldbachCalculator::conDebil(int64_t numero, bool esNegativo) {
       for (int64_t num_2 = num_1; (num_2 * 2) < numero; num_2+=2) {
         if (esPrimo(num_2)) {
             /*Check if the sum of the numbers prime equals the number entered*/
-            if (num_1 + num_2 < numero){
+            if (num_1 + num_2 < numero) {
               num_3 = numero - num_1 - num_2;
             }
             if (num_3 > 2 && num_1 <= num_2 && num_2 <= num_3
               && esPrimo(num_3)) {
               cantidad++;
-                /*Check if this number activates the boolean of * if it is negative to save the sums.*/
+                /*Check if this number activates the 
+                 * boolean of * if it is negative to save the sums.*/
               if (esNegativo) {
                 GoldbachCalculator::Sumas sumas;
                 sumas.num1 = num_1;

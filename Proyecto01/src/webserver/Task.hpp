@@ -11,16 +11,16 @@ class Task{
         size_t index);
         Task(const Task& other);
         ~Task();
-
-    public:
+ public:
         HttpRequest* request;
         HttpResponse* response;
         int64_t number;
         size_t index;
         std::string resultSums;
-
-         /// Returns true if this socket represents the same connection than the other
-        bool operator==(const Task& other) const; 
+         /// Returns true if this socket represents
+         // clear
+         the same connection than the other
+        bool operator==(const Task& other) const;
 };
 
 #endif
