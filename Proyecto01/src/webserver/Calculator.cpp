@@ -9,7 +9,7 @@ void Calculator::consume(const Task& task){
     Task newTask(task);
     
     calculadora.leerDatos(task.number);
-    newTask.resultSums->at(task.index) = calculadora.sums_goldbach.str();
+    newTask.resultSums = calculadora.sums_goldbach.str();
     this->produce(newTask);
 }   
 

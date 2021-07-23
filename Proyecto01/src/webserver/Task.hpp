@@ -7,21 +7,17 @@
 class Task{
     public:
         Task();
-        Task(HttpRequest* request, HttpResponse* response, int64_t number, size_t index,
-          size_t numberToProcess, size_t *numbersProcessed, std::vector<std::string>* result);
+        Task(HttpRequest* request, HttpResponse* response, int64_t number,
+        size_t index);
         Task(const Task& other);
         ~Task();
 
     public:
-        std::vector<std::string>* resultSums;
-
         HttpRequest* request;
-        HttpResponse* response; 
-
-        size_t index;
+        HttpResponse* response;
         int64_t number;
-        size_t numbersToProcess;
-        size_t *numbersProcessed;   
+        size_t index;
+        std::string resultSums;
 
          /// Returns true if this socket represents the same connection than the other
         bool operator==(const Task& other) const; 
