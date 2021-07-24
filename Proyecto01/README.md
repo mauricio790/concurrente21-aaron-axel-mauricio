@@ -42,7 +42,7 @@ y no podrán ser números mayores a 9223372036854775807, ni menores a -9,223,372
 
 Con el fin de entender el programa y su estructura de manera rápida y sencilla, se puede analizar el siguiente diagrama
 
-![Diseño Servidor Web](img/uml_segundoavance.svg "Diagrama servidor Web")
+![Diseño Servidor Web](img/uml_segundo_avance.svg "Diagrama servidor Web")
 
 
 
